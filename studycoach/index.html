@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudyCoach</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=DM+Sans:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a1714;--ink-soft:#4a4642;--ink-faint:#8a8480;
+  --cream:#faf7f2;--cream-d:#f0ebe2;--cream-dd:#e4ddd0;
+  --gold:#c8922a;--gold-bg:#fdf3e0;--gold-dk:#8a6010;
+  --blue:#2563a8;--blue-bg:#e8f0fb;--blue-dk:#1a4278;
+  --green:#2d7a3a;--green-bg:#e8f5eb;--green-dk:#1a4f22;
+  --red:#b03030;--red-bg:#fbebeb;--red-dk:#7a1e1e;
+  --purple:#5b3fa8;--purple-bg:#f0ecfb;--purple-dk:#3a2570;
+  --r:10px;--r-lg:16px;
+  --shadow:0 2px 12px rgba(26,23,20,.08);
+  --shadow-md:0 4px 24px rgba(26,23,20,.12);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+button{font-family:'DM Sans',sans-serif}
+/* AUTH */
+.auth-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--ink);padding:20px}
+.auth-box{background:var(--cream);border-radius:24px;padding:48px 40px;max-width:420px;width:100%;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.4)}
+.auth-logo{font-family:'Fraunces',serif;font-size:28px;font-weight:900;margin-bottom:4px}
+.auth-tagline{font-size:12px;color:var(--ink-faint);margin-bottom:28px;text-transform:uppercase;letter-spacing:.1em}
+.auth-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;margin-bottom:6px}
+.auth-sub{font-size:14px;color:var(--ink-soft);margin-bottom:24px;line-height:1.5}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:14px 20px;border-radius:var(--r);border:1.5px solid var(--cream-dd);background:white;font-size:15px;font-weight:600;color:var(--ink);cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
+.btn-google:hover{border-color:var(--blue);box-shadow:var(--shadow-md)}
+.btn-google svg{width:20px;height:20px;flex-shrink:0}
+.auth-feats{text-align:left;margin-top:24px;display:flex;flex-direction:column;gap:10px}
+.auth-feat{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink-soft)}
+/* LAYOUT */
+.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+.sidebar{background:var(--ink);color:var(--cream);display:flex;flex-direction:column}
+.main{overflow-y:auto}
+.main-inner{padding:36px 40px;max-width:900px}
+/* SIDEBAR */
+.sb-logo{padding:22px 20px 14px;border-bottom:1px solid rgba(255,255,255,.07)}
+.sb-logo-text{font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--cream)}
+.sb-logo-sub{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px;text-transform:uppercase;letter-spacing:.1em}
+.sb-user{padding:12px 20px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px}
+.sb-avatar{width:32px;height:32px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;flex-shrink:0;overflow:hidden}
+.sb-avatar img{width:100%;height:100%;object-fit:cover}
+.sb-user-info{min-width:0}
+.sb-user-name{font-size:13px;font-weight:600;color:var(--cream);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-user-email{font-size:11px;color:rgba(255,255,255,.3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-nav{padding:10px;flex:1;overflow-y:auto}
+.sb-section{font-size:10px;font-weight:700;color:rgba(255,255,255,.28);text-transform:uppercase;letter-spacing:.12em;padding:0 10px;margin:12px 0 5px}
+.sb-btn{display:flex;align-items:center;gap:8px;width:100%;padding:9px 10px;border-radius:8px;border:none;font-size:13px;font-weight:500;color:rgba(255,255,255,.5);background:transparent;cursor:pointer;text-align:left;transition:all .15s}
+.sb-btn:hover{background:rgba(255,255,255,.07);color:var(--cream)}
+.sb-btn.active{background:rgba(200,146,42,.18);color:var(--gold)}
+.sb-btn .ico{font-size:15px;flex-shrink:0}
+.sb-student{padding:7px 10px;border-radius:8px;cursor:pointer;border:1px solid transparent;transition:all .15s;margin-bottom:2px}
+.sb-student:hover{background:rgba(255,255,255,.05)}
+.sb-student.active{background:rgba(200,146,42,.12);border-color:rgba(200,146,42,.25)}
+.sb-student-name{font-size:13px;font-weight:600;color:var(--cream)}
+.sb-student-grade{font-size:10px;color:rgba(255,255,255,.3);margin-top:1px}
+.sb-empty{font-size:12px;color:rgba(255,255,255,.25);padding:8px 10px;line-height:1.5}
+.sb-footer{padding:12px 20px;border-top:1px solid rgba(255,255,255,.07)}
+.sb-stu-btn{width:100%;margin-bottom:8px;padding:9px;border-radius:8px;border:1px solid rgba(200,146,42,.3);background:rgba(200,146,42,.12);color:var(--gold);font-size:12px;font-weight:700;cursor:pointer;text-align:center;transition:all .15s}
+.sb-stu-btn:hover{background:rgba(200,146,42,.2)}
+.sb-signout{background:none;border:none;color:rgba(255,255,255,.3);font-size:12px;cursor:pointer;padding:0;display:flex;align-items:center;gap:4px}
+.sb-signout:hover{color:var(--red-bg)}
+.sb-notif{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:99px;background:var(--red);color:white;font-size:10px;font-weight:700;padding:0 5px;margin-left:auto}
+/* CARDS / FORMS */
+.card{background:white;border:1px solid var(--cream-dd);border-radius:var(--r-lg);padding:24px;margin-bottom:14px;box-shadow:var(--shadow)}
+.ph{margin-bottom:24px}
+.ph-title{font-family:'Fraunces',serif;font-size:28px;font-weight:900;line-height:1.1}
+.ph-sub{font-size:14px;color:var(--ink-soft);margin-top:5px}
+.ph-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.sdiv{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-faint);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--cream-dd)}
+.form-group{margin-bottom:16px}
+.form-label{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:.05em}
+.form-input{width:100%;padding:10px 14px;border-radius:var(--r);border:1.5px solid var(--cream-dd);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);background:white}
+.form-input:focus{outline:none;border-color:var(--gold)}
+.form-select{width:100%;padding:10px 14px;border-radius:var(--r);border:1.5px solid var(--cream-dd);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);background:white;cursor:pointer}
+.form-textarea{min-height:80px;resize:vertical}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-hint{font-size:12px;color:var(--ink-faint);margin-top:4px}
+/* BUTTONS */
+.btn{padding:10px 20px;border-radius:var(--r);border:none;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn-gold{background:var(--gold);color:white}
+.btn-gold:hover{background:var(--gold-dk)}
+.btn-outline{background:transparent;border:1.5px solid var(--cream-dd);color:var(--ink-soft)}
+.btn-outline:hover{border-color:var(--ink-soft);color:var(--ink)}
+.btn-danger{background:var(--red-bg);color:var(--red);border:1.5px solid rgba(176,48,48,.3)}
+.btn-danger:hover{background:var(--red);color:white}
+.btn-sm{padding:6px 13px;font-size:13px}
+.btn-lg{padding:13px 26px;font-size:15px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+/* GRADE SELECTOR */
+.grade-grid{display:grid;grid-template-columns:repeat(9,1fr);gap:6px}
+.grade-btn{padding:9px 4px;border-radius:var(--r);border:1.5px solid var(--cream-dd);background:white;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer;text-align:center;transition:all .15s;width:100%}
+.grade-btn:hover,.grade-btn.sel{border-color:var(--gold);background:var(--gold-bg);color:var(--gold-dk)}
+.grade-label{font-size:9px;color:var(--ink-faint);margin-top:2px;text-align:center}
+/* STUDENT CARDS */
+.student-card{background:white;border:1px solid var(--cream-dd);border-radius:var(--r-lg);padding:16px 20px;margin-bottom:10px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);transition:all .15s}
+.student-card:hover{border-color:var(--gold);box-shadow:var(--shadow-md)}
+.student-avatar{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;background:var(--cream-d)}
+.student-name-lg{font-family:'Fraunces',serif;font-size:16px;font-weight:700}
+.student-meta{font-size:12px;color:var(--ink-faint);margin-top:2px}
+/* QUIZ LIST */
+.quiz-row{background:white;border:1px solid var(--cream-dd);border-radius:var(--r);padding:13px 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow)}
+.quiz-row-name{font-size:14px;font-weight:700}
+.quiz-row-meta{font-size:12px;color:var(--ink-faint);margin-top:2px}
+/* UPLOAD */
+.upload-zone{border:2px dashed var(--cream-dd);border-radius:var(--r-lg);padding:32px 24px;text-align:center;cursor:pointer;transition:all .2s;background:var(--cream-d);position:relative;overflow:hidden}
+.upload-zone:hover,.upload-zone.dragover{border-color:var(--gold);background:var(--gold-bg)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px;margin-top:10px}
+.img-thumb{aspect-ratio:3/4;border-radius:8px;overflow:hidden;border:2px solid var(--cream-dd);position:relative;background:var(--cream-d)}
+.img-thumb img{width:100%;height:100%;object-fit:cover}
+.img-thumb .rm-btn{position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:var(--ink);color:var(--cream);border:none;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s}
+.img-thumb:hover .rm-btn{opacity:1}
+.img-num{position:absolute;bottom:0;left:0;right:0;background:rgba(26,23,20,.65);color:var(--cream);font-size:9px;padding:2px 4px;text-align:center}
+/* STATUS */
+.status-bar{border-radius:var(--r);padding:12px 16px;display:flex;align-items:flex-start;gap:10px;margin-bottom:14px}
+.status-loading{background:var(--gold-bg);border:1px solid rgba(200,146,42,.3)}
+.status-ok{background:var(--green-bg);border:1px solid rgba(45,122,58,.25)}
+.status-err{background:var(--red-bg);border:1px solid rgba(176,48,48,.25)}
+.spinner{width:15px;height:15px;border:2px solid rgba(200,146,42,.3);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;margin-top:2px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.status-text{font-size:13px;font-weight:600;color:var(--gold-dk);line-height:1.4}
+.status-ok .status-text{color:var(--green-dk)}
+.status-err .status-text{color:var(--red-dk)}
+.empty{text-align:center;padding:56px 30px}
+.empty-icon{font-size:50px;margin-bottom:12px}
+.empty-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;margin-bottom:6px}
+.empty-sub{font-size:14px;color:var(--ink-soft)}
+.qp{background:var(--cream-d);border-radius:var(--r);padding:9px 12px;margin-bottom:6px;border-left:3px solid var(--gold)}
+.qp-type{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gold-dk);margin-bottom:2px}
+.qp-q{font-size:13px;font-weight:500}
+.qp-a{font-size:13px;color:var(--green-dk);font-weight:700;margin-top:2px}
+/* API KEY */
+.apikey-box{background:var(--ink);border-radius:var(--r-lg);padding:20px;margin-bottom:14px;color:var(--cream)}
+.apikey-title{font-family:'Fraunces',serif;font-size:16px;font-weight:700;margin-bottom:6px}
+.apikey-sub{font-size:13px;color:rgba(255,255,255,.5);margin-bottom:14px;line-height:1.5}
+.apikey-row{display:flex;gap:8px}
+.apikey-input{flex:1;padding:10px 14px;border-radius:var(--r);border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--cream)}
+.apikey-input:focus{outline:none;border-color:var(--gold)}
+.apikey-ok{color:#6dd88a;font-size:12px;margin-top:7px;display:block}
+/* REWARDS */
+.reward-card{background:white;border:1.5px solid var(--cream-dd);border-radius:var(--r-lg);padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)}
+.notif-card{background:var(--gold-bg);border:1.5px solid rgba(200,146,42,.35);border-radius:var(--r-lg);padding:14px 16px;margin-bottom:10px}
+.notif-title{font-size:14px;font-weight:700;color:var(--gold-dk);margin-bottom:2px}
+.notif-sub{font-size:12px;color:var(--gold-dk);opacity:.75}
+/* PIN OVERLAY */
+.overlay{position:fixed;inset:0;background:rgba(26,23,20,.85);z-index:8888;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.overlay-box{background:var(--cream);border-radius:20px;padding:36px 32px;max-width:360px;width:90%;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.4)}
+.pin-dots{display:flex;gap:12px;justify-content:center;margin:20px 0}
+.pin-dot{width:17px;height:17px;border-radius:50%;border:2px solid var(--cream-dd);background:var(--cream-d);transition:all .15s}
+.pin-dot.filled{background:var(--gold);border-color:var(--gold)}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;max-width:220px;margin:0 auto 10px}
+.pin-key{padding:15px;border-radius:10px;border:1.5px solid var(--cream-dd);background:white;font-size:19px;font-weight:700;color:var(--ink);cursor:pointer;font-family:'Fraunces',serif;transition:all .1s}
+.pin-key:hover{border-color:var(--gold);background:var(--gold-bg)}
+.pin-key:active{transform:scale(.93)}
+.pin-err{color:var(--red);font-size:13px;font-weight:600;min-height:18px;margin-top:6px}
+.pin-inp{width:100%;padding:12px;border-radius:10px;border:1.5px solid var(--cream-dd);font-size:24px;text-align:center;letter-spacing:8px;font-family:'Fraunces',serif;color:var(--ink);background:white;margin-bottom:14px}
+.pin-inp:focus{outline:none;border-color:var(--gold)}
+/* STUDENT APP */
+.student-app{position:fixed;inset:0;background:var(--cream);z-index:7777;display:none;overflow-y:auto;flex-direction:column}
+.student-app.visible{display:flex}
+.stu-header{background:var(--ink);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.stu-header-title{font-family:'Fraunces',serif;font-size:17px;font-weight:900;color:var(--cream)}
+.stu-header-sub{font-size:11px;color:rgba(255,255,255,.35);margin-top:1px}
+.stu-parent-btn{padding:7px 13px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:rgba(255,255,255,.55);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.stu-parent-btn:hover{background:rgba(255,255,255,.14);color:var(--cream)}
+.stu-body{max-width:660px;margin:0 auto;padding:24px 16px 80px;width:100%}
+.stu-who-title{font-family:'Fraunces',serif;font-size:26px;font-weight:900;margin-bottom:4px}
+.stu-picker{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin:16px 0 24px}
+.stu-pick-card{background:white;border:2px solid var(--cream-dd);border-radius:14px;padding:18px 10px;text-align:center;cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
+.stu-pick-card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.stu-pick-emoji{font-size:34px;margin-bottom:6px}
+.stu-pick-name{font-family:'Fraunces',serif;font-size:15px;font-weight:700}
+.stu-pick-grade{font-size:11px;color:var(--ink-faint);margin-top:2px}
+.stu-xp-pill{display:inline-flex;align-items:center;gap:10px;background:var(--gold-bg);border:1.5px solid rgba(200,146,42,.3);border-radius:99px;padding:7px 18px;margin-bottom:14px}
+.stu-xp-num{font-size:19px;font-weight:800;color:var(--gold);font-family:'Fraunces',serif}
+.stu-quiz-card{background:white;border:1.5px solid var(--cream-dd);border-radius:14px;padding:18px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
+.stu-quiz-card:hover{border-color:var(--gold);transform:translateY(-1px);box-shadow:var(--shadow-md)}
+.stu-quiz-name{font-family:'Fraunces',serif;font-size:16px;font-weight:700;margin-bottom:2px}
+.stu-quiz-meta{font-size:12px;color:var(--ink-faint)}
+.stu-empty{text-align:center;padding:44px 16px;color:var(--ink-soft)}
+.stu-back-btn{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--ink-soft);background:none;border:none;cursor:pointer;margin-bottom:14px;padding:0;font-family:'DM Sans',sans-serif}
+.stu-back-btn:hover{color:var(--ink)}
+.stu-reward-card{background:white;border:2px solid var(--cream-dd);border-radius:14px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)}
+.stu-reward-card.unlocked{border-color:var(--gold);background:var(--gold-bg);cursor:pointer}
+.stu-reward-card.unlocked:hover{transform:translateY(-1px);box-shadow:var(--shadow-md)}
+.stu-reward-card.pending{border-color:var(--blue);background:var(--blue-bg)}
+.stu-reward-card.redeemed{border-color:var(--green);background:var(--green-bg)}
+.stu-reward-card.locked{opacity:.55}
+.stu-rwd-bar-bg{flex:1;height:7px;background:var(--cream-dd);border-radius:99px;overflow:hidden;margin-top:5px}
+.stu-rwd-bar-fill{height:7px;border-radius:99px;background:var(--gold)}
+/* STUDY UI */
+.study-wrap{max-width:620px;margin:0 auto}
+.s-hud{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:7px}
+.s-cell{background:white;border:1px solid var(--cream-dd);border-radius:var(--r);padding:9px 7px;text-align:center;box-shadow:var(--shadow)}
+.s-val{font-size:17px;font-weight:700;line-height:1;font-family:'Fraunces',serif}
+.s-lbl{font-size:10px;color:var(--ink-faint);margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
+.s-xp-track{background:var(--cream-d);border-radius:99px;height:5px;margin-bottom:3px;overflow:hidden}
+.s-xp-fill{height:5px;border-radius:99px;background:var(--gold);transition:width .5s}
+.s-xp-lbl{font-size:10px;color:var(--ink-faint);text-align:center;margin-bottom:.8rem}
+.s-card{background:white;border:1px solid var(--cream-dd);border-radius:var(--r-lg);padding:1.1rem;margin-bottom:9px;box-shadow:var(--shadow)}
+.s-coach{display:flex;gap:9px;align-items:flex-start;margin-bottom:9px}
+.s-av{font-size:22px;flex-shrink:0}
+.s-bubble{background:var(--blue-bg);border:1px solid rgba(37,99,168,.18);border-radius:var(--r-lg);border-top-left-radius:4px;padding:9px 13px;flex:1}
+.s-bubble p{font-size:13px;color:var(--blue-dk);line-height:1.5}
+.s-steps{display:flex;margin-bottom:.8rem;overflow-x:auto}
+.s-step{flex:1;min-width:44px;display:flex;flex-direction:column;align-items:center;position:relative}
+.s-step:not(:last-child)::after{content:'';position:absolute;top:11px;left:50%;width:100%;height:2px;background:var(--cream-dd);z-index:0}
+.s-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;border:2px solid var(--cream-dd);background:white;color:var(--ink-faint);position:relative;z-index:1;flex-shrink:0}
+.s-dot.done{background:var(--green);border-color:var(--green);color:white}
+.s-dot.active{background:var(--blue);border-color:var(--blue);color:white}
+.s-slbl{font-size:9px;color:var(--ink-faint);margin-top:3px;text-align:center;text-transform:uppercase;white-space:nowrap}
+.s-slbl.active{color:var(--blue);font-weight:700}
+.s-slbl.done{color:var(--green)}
+.s-prog-wrap{background:white;border:1px solid var(--cream-dd);border-radius:var(--r);padding:8px 13px;margin-bottom:9px;display:flex;align-items:center;gap:9px;box-shadow:var(--shadow)}
+.s-prog-lbl{font-size:11px;color:var(--ink-faint);flex-shrink:0}
+.s-prog-bg{flex:1;background:var(--cream-d);border-radius:99px;height:7px;overflow:hidden}
+.s-prog-fill{height:7px;border-radius:99px;background:var(--blue);transition:width .4s}
+.s-prog-pct{font-size:11px;font-weight:700;color:var(--blue);flex-shrink:0}
+.s-qnum{font-size:11px;font-weight:700;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.s-qtype-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;margin-bottom:7px}
+.s-qtext{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:.8rem;line-height:1.5}
+.s-opts{display:flex;flex-direction:column;gap:7px}
+.s-opt{padding:9px 13px;border-radius:var(--r);border:1.5px solid var(--cream-dd);font-size:13px;color:var(--ink);background:var(--cream-d);text-align:left;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:border-color .1s,background .1s}
+.s-opt:hover:not(.off):not(.ok):not(.bad):not(.show){border-color:var(--blue);background:var(--blue-bg);color:var(--blue-dk)}
+.s-opt.ok{background:var(--green-bg);border-color:var(--green);color:var(--green-dk);pointer-events:none}
+.s-opt.bad{background:var(--red-bg);border-color:var(--red);color:var(--red-dk);pointer-events:none}
+.s-opt.show{background:var(--green-bg);border-color:var(--green);color:var(--green-dk);pointer-events:none}
+.s-opt.off{pointer-events:none}
+.s-fb{margin-top:9px;padding:9px 13px;border-radius:var(--r);font-size:13px;font-weight:600}
+.s-fb.ok{background:var(--green-bg);color:var(--green-dk)}
+.s-fb.bad{background:var(--red-bg);color:var(--red-dk)}
+.s-fin{width:100%;padding:9px 14px;border-radius:var(--r);border:1.5px solid var(--cream-dd);font-size:14px;color:var(--ink);background:var(--cream-d);font-family:'DM Sans',sans-serif;margin-bottom:7px}
+.s-fin:focus{outline:none;border-color:var(--blue);background:white}
+.s-hint{background:var(--gold-bg);border:1px solid rgba(200,146,42,.25);border-radius:var(--r);padding:6px 11px;font-size:12px;color:var(--gold-dk);margin-bottom:9px}
+.s-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px;align-items:center}
+.s-xp-pop{font-size:13px;font-weight:700;color:var(--gold)}
+.s-fc-wrap{perspective:1200px;margin-bottom:10px;min-height:190px}
+.s-fc-inner{width:100%;min-height:190px;position:relative;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1);cursor:pointer;border-radius:var(--r-lg)}
+.s-fc-inner.flipped{transform:rotateY(180deg)}
+.s-fc-face{position:absolute;inset:0;border-radius:var(--r-lg);padding:1.2rem;display:flex;flex-direction:column;align-items:center;justify-content:center;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.s-fc-front{background:var(--purple-bg);border:2px solid var(--purple)}
+.s-fc-back{background:var(--green-bg);border:2px solid var(--green);transform:rotateY(180deg)}
+.s-fc-tag{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.s-fc-front .s-fc-tag{color:var(--purple-dk)}
+.s-fc-back .s-fc-tag{color:var(--green-dk)}
+.s-fc-q{font-size:15px;font-weight:600;text-align:center;line-height:1.4;color:var(--purple-dk)}
+.s-fc-a{font-size:19px;font-weight:800;text-align:center;color:var(--green-dk);line-height:1.3;font-family:'Fraunces',serif}
+.s-fc-tap{font-size:11px;margin-top:12px;opacity:.5;color:var(--purple-dk)}
+.s-judge{display:flex;gap:9px;margin-top:4px}
+.s-yes{flex:1;padding:10px;border-radius:var(--r);border:2px solid var(--green);font-size:13px;font-weight:700;background:var(--green-bg);color:var(--green-dk);font-family:'DM Sans',sans-serif;cursor:pointer}
+.s-no{flex:1;padding:10px;border-radius:var(--r);border:2px solid var(--red);font-size:13px;font-weight:700;background:var(--red-bg);color:var(--red-dk);font-family:'DM Sans',sans-serif;cursor:pointer}
+.s-top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem}
+.s-dots{display:flex;gap:4px;flex-wrap:wrap}
+.s-d{width:9px;height:9px;border-radius:50%;background:var(--cream-d);border:1.5px solid var(--cream-dd)}
+.s-d.ok{background:var(--green);border-color:var(--green)}
+.s-d.bad{background:var(--red);border-color:var(--red)}
+.s-d.cur{background:var(--blue);border-color:var(--blue)}
+.s-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:1rem 0}
+.s-met{background:var(--cream-d);border-radius:var(--r);padding:9px 7px;text-align:center}
+.s-met .mn{font-size:19px;font-weight:800;font-family:'Fraunces',serif}
+.s-met .ml{font-size:10px;color:var(--ink-faint);margin-top:2px;text-transform:uppercase;letter-spacing:.03em}
+.s-missed{background:var(--cream-d);border-radius:var(--r);padding:9px 11px;margin-bottom:5px;border-left:3px solid var(--red)}
+.s-mq{font-size:12px;color:var(--ink-faint);margin-bottom:2px}
+.s-ma{font-size:13px;font-weight:700}
+.s-action-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:1rem}
+.s-big{font-size:56px;font-weight:800;line-height:1;font-family:'Fraunces',serif}
+.s-phase-card{display:flex;gap:12px;align-items:flex-start;padding:11px;border-radius:var(--r);border:1px solid var(--cream-dd);background:white;margin-bottom:7px;box-shadow:var(--shadow)}
+.s-phase-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0;font-family:'Fraunces',serif}
+.s-phase-body h3{font-size:13px;font-weight:700;margin-bottom:2px}
+.s-phase-body p{font-size:12px;color:var(--ink-soft);line-height:1.4}
+.s-ptag{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;margin-top:4px}
+.s-review-banner{background:var(--gold-bg);border:1px solid rgba(200,146,42,.25);border-radius:var(--r);padding:8px 13px;font-size:13px;color:var(--gold-dk);font-weight:600;margin-bottom:.65rem}
+.s-srow{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.s-sname{font-size:12px;color:var(--ink-faint);width:90px;flex-shrink:0}
+.s-sbar-bg{flex:1;background:var(--cream-d);border-radius:99px;height:8px;overflow:hidden}
+.s-sbar{height:8px;border-radius:99px}
+.s-spct{font-size:11px;color:var(--ink-faint);width:28px;text-align:right;flex-shrink:0;font-weight:700}
+/* TOAST */
+.toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);background:var(--gold);color:white;padding:9px 20px;border-radius:99px;font-size:13px;font-weight:700;z-index:9999;white-space:nowrap;pointer-events:none;animation:toastIn .2s ease;box-shadow:var(--shadow-md);font-family:'DM Sans',sans-serif}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@media(max-width:768px){.app{grid-template-columns:1fr}.sidebar{display:none}.main-inner{padding:20px}.s-metrics{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr}.grade-grid{grid-template-columns:repeat(5,1fr)}}
+</style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div id="auth-screen" class="auth-page" style="display:none">
+  <div class="auth-box">
+    <div class="auth-logo">StudyCoach</div>
+    <div class="auth-tagline">AI-Powered Quiz Prep</div>
+    <div class="auth-title">Study smarter, stress less.</div>
+    <div class="auth-sub">Take a photo of any textbook chapter and StudyCoach builds a personalized quiz — then walks your child through every question until they're ready.</div>
+    <button class="btn-google" onclick="signInWithGoogle()">
+      <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Sign in with Google
+    </button>
+    <div class="auth-feats">
+      <div class="auth-feat"><span>📸</span><div><strong>Just take a photo</strong> — AI reads any textbook or study guide and builds the quiz automatically</div></div>
+      <div class="auth-feat"><span>🔄</span><div><strong>Every fact, multiple ways</strong> — each concept is tested as multiple choice, fill-in-blank, and reverse so nothing is missed</div></div>
+      <div class="auth-feat"><span>🎁</span><div><strong>XP rewards system</strong> — kids earn points they can redeem for rewards you set up</div></div>
+      <div class="auth-feat"><span>🔒</span><div><strong>PIN-protected parent dashboard</strong> — kids see only their quizzes and rewards</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="main-app" class="app" style="display:none">
+  <aside class="sidebar">
+    <div class="sb-logo"><div class="sb-logo-text">StudyCoach</div><div class="sb-logo-sub">AI Quiz Prep</div></div>
+    <div class="sb-user">
+      <div class="sb-avatar" id="sb-avatar">?</div>
+      <div class="sb-user-info"><div class="sb-user-name" id="sb-name">Loading...</div><div class="sb-user-email" id="sb-email"></div></div>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-section">Parent Tools</div>
+      <button class="sb-btn" id="nav-students" onclick="showView('students')"><span class="ico">👨‍👩‍👧</span> My Students</button>
+      <button class="sb-btn" id="nav-create" onclick="showView('create')"><span class="ico">➕</span> Create Quiz</button>
+      <button class="sb-btn" id="nav-rewards" onclick="showView('rewards')"><span class="ico">🎁</span> Rewards <span id="notif-badge" class="sb-notif" style="display:none">0</span></button>
+      <button class="sb-btn" id="nav-settings" onclick="showView('settings')"><span class="ico">⚙️</span> Settings</button>
+      <div class="sb-section" style="margin-top:16px">Students</div>
+      <div id="sb-student-list"><div class="sb-empty">No students yet.</div></div>
+    </div>
+    <div class="sb-footer">
+      <button class="sb-stu-btn" onclick="openStudentDashboard()">🎓 Switch to Student View</button>
+      <button class="sb-signout" onclick="doSignOut()">← Sign out</button>
+    </div>
+  </aside>
+  <main class="main"><div class="main-inner" id="main-content"></div></main>
+</div>
+
+<!-- PIN ENTRY -->
+<div id="pin-overlay" class="overlay" style="display:none">
+  <div class="overlay-box">
+    <div style="font-size:32px;margin-bottom:6px">🔒</div>
+    <div style="font-family:Fraunces,serif;font-size:20px;font-weight:900;margin-bottom:4px">Parent Login</div>
+    <div style="font-size:13px;color:var(--ink-soft)">Enter your 4-digit PIN</div>
+    <div class="pin-dots"><div class="pin-dot" id="pd0"></div><div class="pin-dot" id="pd1"></div><div class="pin-dot" id="pd2"></div><div class="pin-dot" id="pd3"></div></div>
+    <div class="pin-pad">
+      <button class="pin-key" onclick="pinKey('1')">1</button><button class="pin-key" onclick="pinKey('2')">2</button><button class="pin-key" onclick="pinKey('3')">3</button>
+      <button class="pin-key" onclick="pinKey('4')">4</button><button class="pin-key" onclick="pinKey('5')">5</button><button class="pin-key" onclick="pinKey('6')">6</button>
+      <button class="pin-key" onclick="pinKey('7')">7</button><button class="pin-key" onclick="pinKey('8')">8</button><button class="pin-key" onclick="pinKey('9')">9</button>
+      <button class="pin-key" style="opacity:.2"></button><button class="pin-key" onclick="pinKey('0')">0</button><button class="pin-key" onclick="pinKey('X')" style="font-size:16px">⌫</button>
+    </div>
+    <div class="pin-err" id="pin-err"></div>
+    <button style="margin-top:10px;background:none;border:none;color:var(--ink-faint);font-size:12px;cursor:pointer;font-family:DM Sans,sans-serif" onclick="closePinOverlay()">Cancel</button>
+  </div>
+</div>
+
+<!-- PIN SETUP -->
+<div id="pin-setup-overlay" class="overlay" style="display:none">
+  <div class="overlay-box">
+    <div style="font-size:32px;margin-bottom:6px">🔐</div>
+    <div style="font-family:Fraunces,serif;font-size:20px;font-weight:900;margin-bottom:4px">Set Your Parent PIN</div>
+    <div style="font-size:13px;color:var(--ink-soft);margin-bottom:14px">Create a 4-digit PIN to protect the parent dashboard</div>
+    <input class="pin-inp" id="pin-inp-a" type="password" inputmode="numeric" maxlength="4" placeholder="••••" />
+    <input class="pin-inp" id="pin-inp-b" type="password" inputmode="numeric" maxlength="4" placeholder="Confirm PIN" style="margin-top:-6px" />
+    <button class="btn btn-gold" style="width:100%;padding:13px" onclick="savePinSetup()">Set PIN</button>
+    <div class="pin-err" id="pin-setup-err" style="text-align:center;margin-top:8px"></div>
+  </div>
+</div>
+
+<!-- STUDENT APP -->
+<div id="student-app" class="student-app">
+  <div class="stu-header">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button onclick="stuGoHome()" style="padding:7px 13px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:rgba(255,255,255,.7);font-size:13px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;transition:all .15s;display:flex;align-items:center;gap:5px" onmouseover="this.style.background='rgba(255,255,255,.14)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">🏠 Home</button>
+      <div><div class="stu-header-title">📚 StudyCoach</div><div class="stu-header-sub" id="stu-header-sub">Student Dashboard</div></div>
+    </div>
+    <button class="stu-parent-btn" onclick="requestParentAccess()">🔒 Parent Login</button>
+  </div>
+  <div class="stu-body" id="stu-body"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, addDoc, deleteDoc, query, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey:"AIzaSyAxMVzs1CLY8CtxUzmW_-nRRKy0C3ZVSMw",
+  authDomain:"studycoach-216da.firebaseapp.com",
+  projectId:"studycoach-216da",
+  storageBucket:"studycoach-216da.firebasestorage.app",
+  messagingSenderId:"780706155037",
+  appId:"1:780706155037:web:18a78a8b3fbec5c2e8d4f4"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+// ── GLOBALS ──
+let currentUser=null, students=[], activeStudentId=null, activeQuizzes=[];
+let uploadedImages=[], generatedQuizData=null;
+let stuCurrentStudentId=null, stuQuizzes=[];
+let pinBuffer='', pinCallback=null;
+window._apiKey=''; window._newGrade=null; window._editGrade=null;
+window._editStudentId=null; window._activeQuiz=null; window._studyInStuApp=false;
+
+// ── HELPERS ──
+const shuffle = a => a.slice().sort(()=>Math.random()-.5);
+const esc = s => (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2800);}
+function gradeLabel(g){return({'K':'Kindergarten','1':'1st Grade','2':'2nd Grade','3':'3rd Grade','4':'4th Grade','5':'5th Grade','6':'6th Grade','7':'7th Grade','8':'8th Grade'}[g]||'Grade '+g);}
+function gTier(grade){const g=parseInt(grade)||5;if(g<=2)return 1;if(g<=4)return 2;if(g<=6)return 3;return 4;}
+function gPick(grade,t1,t2,t3,t4){const t=gTier(grade);return t===1?t1:t===2?t2:t===3?t3:t4;}
+function stuEl(){return window._studyInStuApp?document.getElementById('stu-body'):document.getElementById('main-content');}
+function setMC(html){const el=stuEl();if(el)el.innerHTML=html;}
+// Fuzzy match for fill-in-the-blank
+function levenshtein(a,b){
+  a=a.toLowerCase().trim();b=b.toLowerCase().trim();
+  if(a===b)return 0;
+  const m=a.length,n=b.length,dp=[];
+  for(let i=0;i<=m;i++){dp[i]=[];for(let j=0;j<=n;j++)dp[i][j]=i===0?j:j===0?i:0;}
+  for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]:1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
+  return dp[m][n];
+}
+function fuzzyMatch(input,answer){
+  if(!input||!answer)return false;
+  const a=input.toLowerCase().trim(),b=answer.toLowerCase().trim();
+  if(a===b)return true;
+  const maxDist=b.length<=4?1:b.length<=8?2:3;
+  return levenshtein(a,b)<=maxDist;
+}
+
+// ── AUTH ──
+window.signInWithGoogle=async()=>{try{await signInWithPopup(auth,provider);}catch(e){toast('Sign-in failed: '+e.message);}};
+window.doSignOut=async()=>await fbSignOut(auth);
+
+onAuthStateChanged(auth,async(user)=>{
+  if(user){
+    currentUser=user;
+    document.getElementById('auth-screen').style.display='none';
+    document.getElementById('main-app').style.display='grid';
+    await loadUserDoc(user);
+    updateSidebarUser(user);
+    await loadStudents();
+    showView('students');
+    checkNotifBadge();
+  } else {
+    currentUser=null;
+    document.getElementById('auth-screen').style.display='flex';
+    document.getElementById('main-app').style.display='none';
+  }
+});
+
+async function loadUserDoc(user){
+  const ref=doc(db,'users',user.uid);
+  const snap=await getDoc(ref);
+  if(!snap.exists()){await setDoc(ref,{email:user.email,name:user.displayName,createdAt:serverTimestamp(),apiKey:''});}
+  else{window._apiKey=(snap.data().apiKey||'');}
+}
+
+function updateSidebarUser(user){
+  const av=document.getElementById('sb-avatar');
+  if(user.photoURL)av.innerHTML='<img src="'+user.photoURL+'" />';
+  else av.textContent=(user.displayName||'?')[0].toUpperCase();
+  document.getElementById('sb-name').textContent=user.displayName||'Parent';
+  document.getElementById('sb-email').textContent=user.email||'';
+}
+
+// ── STUDENTS ──
+async function loadStudents(){
+  if(!currentUser)return;
+  const snap=await getDocs(query(collection(db,'users',currentUser.uid,'students'),orderBy('createdAt')));
+  students=snap.docs.map(d=>({id:d.id,...d.data()}));
+  renderSidebarStudents();
+  if(students.length>0&&!activeStudentId)activeStudentId=students[0].id;
+}
+
+function renderSidebarStudents(){
+  const el=document.getElementById('sb-student-list');if(!el)return;
+  if(!students.length){el.innerHTML='<div class="sb-empty">Add students in My Students.</div>';return;}
+  el.innerHTML=students.map(s=>'<div class="sb-student'+(s.id===activeStudentId?' active':'')+'" onclick="selectStudent(\''+s.id+'\')">'+'<div class="sb-student-name">'+(s.emoji||'🎒')+' '+s.name+'</div><div class="sb-student-grade">Grade '+s.grade+' · '+gradeLabel(s.grade)+'</div></div>').join('');
+}
+
+window.selectStudent=(id)=>{activeStudentId=id;renderSidebarStudents();showView('quizzes');};
+
+window.addStudent=async()=>{
+  const name=(document.getElementById('new-student-name').value||'').trim();
+  const grade=window._newGrade;
+  const emoji=document.getElementById('new-student-emoji').value||'🎒';
+  if(!name){toast('Enter a name first');return;}
+  if(!grade){toast('Select a grade');return;}
+  const ref=await addDoc(collection(db,'users',currentUser.uid,'students'),{name,grade,emoji,createdAt:serverTimestamp(),totalXP:0});
+  await loadStudents();activeStudentId=ref.id;toast(name+' added!');showView('students');
+};
+
+window.deleteStudent=async(id)=>{
+  if(!confirm('Delete this student and all their quizzes?'))return;
+  await deleteDoc(doc(db,'users',currentUser.uid,'students',id));
+  if(activeStudentId===id)activeStudentId=null;
+  await loadStudents();showView('students');
+};
+
+window.showEditStudent=(id)=>{
+  const s=students.find(x=>x.id===id);if(!s)return;
+  window._editStudentId=id;window._editGrade=s.grade;
+  const mc=document.getElementById('main-content');
+  mc.innerHTML='<div class="ph"><div class="ph-title">Edit Student</div></div><div class="card">'+
+    '<div class="form-group"><label class="form-label">Name</label><input class="form-input" id="edit-name" value="'+s.name+'" /></div>'+
+    '<div class="form-group"><label class="form-label">Avatar</label><div id="edit-ep" style="display:flex;flex-wrap:wrap;gap:6px"></div><input type="hidden" id="edit-emoji" value="'+(s.emoji||'🎒')+'" /></div>'+
+    '<div class="form-group"><label class="form-label">Grade</label><div class="grade-grid">'+
+      ['K','1','2','3','4','5','6','7','8'].map(g=>'<div><button class="grade-btn'+(s.grade===g?' sel':'')+'" id="egb-'+g+'" onclick="selectEditGrade(\''+g+'\')">'+g+'</button><div class="grade-label">'+gradeLabel(g)+'</div></div>').join('')+
+    '</div></div>'+
+    '<div style="display:flex;gap:8px"><button class="btn btn-gold" onclick="saveEditStudent()">💾 Save</button><button class="btn btn-outline" onclick="showView(\'students\')">Cancel</button></div>'+
+  '</div>';
+  setTimeout(()=>initEmojiPicker('edit-ep','edit-emoji','eep',s.emoji||'🎒'),0);
+};
+
+window.selectEditGrade=(g)=>{
+  window._editGrade=g;
+  document.querySelectorAll('.grade-btn').forEach(b=>b.classList.remove('sel'));
+  const el=document.getElementById('egb-'+g);if(el)el.classList.add('sel');
+};
+
+window.saveEditStudent=async()=>{
+  const id=window._editStudentId;if(!id||!currentUser)return;
+  const name=(document.getElementById('edit-name').value||'').trim();
+  const emoji=document.getElementById('edit-emoji').value||'🎒';
+  const grade=window._editGrade;
+  if(!name){toast('Name cannot be empty');return;}
+  if(!grade){toast('Select a grade');return;}
+  await updateDoc(doc(db,'users',currentUser.uid,'students',id),{name,emoji,grade});
+  await loadStudents();toast('Student updated ✓');showView('students');
+};
+
+const AVATAR_EMOJIS=['🎒','📚','🌟','⭐','🦄','🚀','🎨','⚽','🏀','🎸','🦊','🐶','🐱','🐼','🦁','🐸','🦋','🐙','🦖','🐉','🐰','🐨','🌈','🌺','🌸','🍎','🍕','🎮','🎯','🎪','🏆','💡','🔬','🎭','🎻','🏄','🧩','🎠','🌙','☀️','❄️','🎈'];
+
+function initEmojiPicker(pickerId,inputId,prefix,current){
+  const picker=document.getElementById(pickerId);if(!picker)return;
+  picker.innerHTML=AVATAR_EMOJIS.map(e=>'<button onclick="selectEmoji(\''+pickerId+'\',\''+inputId+'\',\''+prefix+'\',\''+e+'\')" style="font-size:20px;padding:5px;border-radius:7px;border:2px solid '+(e===current?'var(--gold)':'var(--cream-dd)')+';background:'+(e===current?'var(--gold-bg)':'white')+';cursor:pointer;line-height:1" id="'+prefix+'-'+e.codePointAt(0)+'">'+e+'</button>').join('');
+}
+window.selectEmoji=(pickerId,inputId,prefix,e)=>{
+  const inp=document.getElementById(inputId);if(inp)inp.value=e;
+  document.querySelectorAll('#'+pickerId+' button').forEach(b=>{b.style.borderColor='var(--cream-dd)';b.style.background='white';});
+  const btn=document.getElementById(prefix+'-'+e.codePointAt(0));
+  if(btn){btn.style.borderColor='var(--gold)';btn.style.background='var(--gold-bg)';}
+};
+
+window.selectGrade=(g)=>{
+  window._newGrade=g;
+  document.querySelectorAll('.grade-btn').forEach(b=>b.classList.remove('sel'));
+  const el=document.getElementById('gb-'+g);if(el)el.classList.add('sel');
+};
+
+// ── QUIZZES ──
+async function loadQuizzes(studentId){
+  if(!currentUser||!studentId)return[];
+  const snap=await getDocs(query(collection(db,'users',currentUser.uid,'students',studentId,'quizzes'),orderBy('createdAt','desc')));
+  return snap.docs.map(d=>({id:d.id,...d.data()}));
+}
+window.deleteQuiz=async(quizId)=>{
+  if(!confirm('Delete this quiz?'))return;
+  await deleteDoc(doc(db,'users',currentUser.uid,'students',activeStudentId,'quizzes',quizId));
+  showView('quizzes');
+};
+window.studyQuiz=(quizId)=>{
+  const quiz=activeQuizzes.find(q=>q.id===quizId);if(!quiz)return;
+  window._activeQuiz=quiz;openStudentDashboard(quizId);
+};
+
+// ── API KEY ──
+window.saveApiKey=async()=>{
+  const key=(document.getElementById('api-key-input').value||'').trim();
+  if(!key.startsWith('sk-ant-')){toast('Key should start with sk-ant-');return;}
+  await updateDoc(doc(db,'users',currentUser.uid),{apiKey:key});
+  window._apiKey=key;toast('API key saved!');
+  const st=document.getElementById('apikey-status');if(st)st.innerHTML='<span class="apikey-ok">✓ Saved</span>';
+};
+
+// ── PIN SYSTEM ──
+async function getStoredPin(){if(!currentUser)return null;const s=await getDoc(doc(db,'users',currentUser.uid));return s.data()?.parentPin||null;}
+async function savePin(pin){if(currentUser)await updateDoc(doc(db,'users',currentUser.uid),{parentPin:pin});}
+
+window.requestParentAccess=async()=>{const stored=await getStoredPin();if(!stored)showPinSetup();else showPinOverlay(()=>{closeStudentDashboard();showView('students');});};
+
+function showPinOverlay(cb){pinBuffer='';pinCallback=cb;updatePinDots();document.getElementById('pin-err').textContent='';document.getElementById('pin-overlay').style.display='flex';}
+function closePinOverlay(){document.getElementById('pin-overlay').style.display='none';pinBuffer='';}
+window.closePinOverlay=closePinOverlay;
+
+window.pinKey=async(k)=>{
+  const err=document.getElementById('pin-err');
+  if(k==='X'){pinBuffer=pinBuffer.slice(0,-1);updatePinDots();return;}
+  if(!k||pinBuffer.length>=4)return;
+  pinBuffer+=String(k);updatePinDots();
+  if(pinBuffer.length===4){
+    const stored=await getStoredPin();
+    if(pinBuffer===stored){closePinOverlay();if(pinCallback)pinCallback();}
+    else{err.textContent='Incorrect PIN. Try again.';setTimeout(()=>{pinBuffer='';updatePinDots();err.textContent='';},900);}
+  }
+};
+function updatePinDots(){for(let i=0;i<4;i++){const d=document.getElementById('pd'+i);if(d)d.className='pin-dot'+(i<pinBuffer.length?' filled':'');}}
+
+function showPinSetup(){document.getElementById('pin-inp-a').value='';document.getElementById('pin-inp-b').value='';document.getElementById('pin-setup-err').textContent='';document.getElementById('pin-setup-overlay').style.display='flex';}
+window.savePinSetup=async()=>{
+  const pin=(document.getElementById('pin-inp-a').value||'').trim();
+  const confirm2=(document.getElementById('pin-inp-b').value||'').trim();
+  const err=document.getElementById('pin-setup-err');
+  if(pin.length!==4||isNaN(Number(pin))){err.textContent='PIN must be 4 digits';return;}
+  if(pin!==confirm2){err.textContent='PINs do not match';return;}
+  await savePin(pin);document.getElementById('pin-setup-overlay').style.display='none';toast('PIN set! ✓');
+};
+window.changePin=()=>showPinOverlay(()=>showPinSetup());
+
+// ── VIEWS ──
+window.showView=async(view)=>{
+  ['students','create','rewards','settings','quizzes'].forEach(v=>{
+    const el=document.getElementById('nav-'+v);if(el)el.className='sb-btn'+(view===v?' active':'');
+  });
+  if(view==='students')renderStudentsView();
+  else if(view==='create')renderCreateView();
+  else if(view==='rewards')renderRewardsView();
+  else if(view==='settings')renderSettingsView();
+  else if(view==='quizzes'){
+    if(!activeStudentId){renderStudentsView();return;}
+    activeQuizzes=await loadQuizzes(activeStudentId);renderQuizzesView();
+  }
+};
+
+// ── STUDENTS VIEW ──
+function renderStudentsView(){
+  const mc=document.getElementById('main-content');
+  const cards=students.map(s=>'<div class="student-card">'+
+    '<div class="student-avatar">'+(s.emoji||'🎒')+'</div>'+
+    '<div style="flex:1"><div class="student-name-lg">'+s.name+'</div><div class="student-meta">Grade '+s.grade+' · '+gradeLabel(s.grade)+'</div></div>'+
+    '<div style="display:flex;gap:7px">'+
+      '<button class="btn btn-gold btn-sm" onclick="selectStudent(\''+s.id+'\')">View Quizzes</button>'+
+      '<button class="btn btn-outline btn-sm" onclick="showEditStudent(\''+s.id+'\')">✏️</button>'+
+      '<button class="btn btn-danger btn-sm" onclick="deleteStudent(\''+s.id+'\')">✕</button>'+
+    '</div></div>').join('');
+  mc.innerHTML='<div class="ph"><div class="ph-title">My Students</div><div class="ph-sub">Manage student profiles and their quiz libraries.</div></div>'+
+    (students.length?cards:'<div class="empty"><div class="empty-icon">👨‍👩‍👧</div><div class="empty-title">No students yet</div><div class="empty-sub">Add your first student below.</div></div>')+
+    '<div class="card" style="margin-top:20px"><div class="sdiv">Add a new student</div>'+
+      '<div class="form-grid" style="margin-bottom:14px">'+
+        '<div class="form-group" style="margin-bottom:0"><label class="form-label">Name</label><input class="form-input" id="new-student-name" placeholder="e.g. Olivia" /></div>'+
+        '<div class="form-group" style="margin-bottom:0"><label class="form-label">Avatar</label><div id="new-ep" style="display:flex;flex-wrap:wrap;gap:5px"></div><input type="hidden" id="new-student-emoji" value="🎒" /></div>'+
+      '</div>'+
+      '<div class="form-group"><label class="form-label">Grade</label><div class="grade-grid">'+
+        ['K','1','2','3','4','5','6','7','8'].map(g=>'<div><button class="grade-btn" id="gb-'+g+'" onclick="selectGrade(\''+g+'\')">'+g+'</button><div class="grade-label">'+gradeLabel(g)+'</div></div>').join('')+
+      '</div></div>'+
+      '<button class="btn btn-gold" onclick="addStudent()">➕ Add Student</button></div>';
+  setTimeout(()=>initEmojiPicker('new-ep','new-student-emoji','nep','🎒'),0);
+}
+
+// ── QUIZZES VIEW ──
+function renderQuizzesView(){
+  const student=students.find(s=>s.id===activeStudentId);if(!student)return;
+  const mc=document.getElementById('main-content');
+  const rows=activeQuizzes.map(q=>'<div class="quiz-row">'+
+    '<div><div class="quiz-row-name">'+q.name+'</div><div class="quiz-row-meta">'+(q.subject||'General')+' · '+(q.questions?.length||0)+' questions</div></div>'+
+    '<div style="display:flex;gap:7px">'+
+      '<button class="btn btn-gold btn-sm" onclick="studyQuiz(\''+q.id+'\')">🎓 Study</button>'+
+      '<button class="btn btn-outline btn-sm" onclick="previewQuiz(\''+q.id+'\')">Preview</button>'+
+      '<button class="btn btn-danger btn-sm" onclick="deleteQuiz(\''+q.id+'\')">✕</button>'+
+    '</div></div>').join('');
+  mc.innerHTML='<div class="ph"><div class="ph-row">'+
+    '<div><div class="ph-title">'+(student.emoji||'🎒')+' '+student.name+'\'s Quizzes</div><div class="ph-sub">Grade '+student.grade+' · '+gradeLabel(student.grade)+'</div></div>'+
+    '<button class="btn btn-gold" onclick="showView(\'create\')">➕ New Quiz</button></div></div>'+
+    (activeQuizzes.length?rows:'<div class="empty"><div class="empty-icon">📚</div><div class="empty-title">No quizzes yet</div><div class="empty-sub">Create the first one!</div><div style="margin-top:16px"><button class="btn btn-gold" onclick="showView(\'create\')">Create First Quiz</button></div></div>')+
+    '<div id="quiz-preview-area"></div>';
+}
+
+window.previewQuiz=(quizId)=>{
+  const quiz=activeQuizzes.find(q=>q.id===quizId);if(!quiz)return;
+  const area=document.getElementById('quiz-preview-area');if(!area)return;
+  const sHtml=(quiz.sections||[]).map(s=>'<div style="margin-bottom:14px"><div class="sdiv">'+s.name+'</div>'+
+    s.questions.slice(0,4).map(q=>'<div class="qp"><div class="qp-type">'+q.type+'</div><div class="qp-q">'+q.q+'</div><div class="qp-a">✓ '+q.ans+'</div></div>').join('')+
+    (s.questions.length>4?'<div style="font-size:12px;color:var(--ink-faint)">+'+(s.questions.length-4)+' more</div>':'')+'</div>').join('');
+  area.innerHTML='<div class="card" style="margin-top:16px"><div class="sdiv">'+quiz.name+' — '+(quiz.questions?.length||0)+' questions total</div>'+sHtml+'<button class="btn btn-outline btn-sm" onclick="document.getElementById(\'quiz-preview-area\').innerHTML=\'\'">Close</button></div>';
+};
+
+// ── CREATE VIEW ──
+function renderCreateView(){
+  const mc=document.getElementById('main-content');
+  const opts=students.map(s=>'<option value="'+s.id+'"'+(s.id===activeStudentId?' selected':'')+'>'+( s.emoji||'🎒')+' '+s.name+' (Grade '+s.grade+')</option>').join('');
+  mc.innerHTML='<div class="ph"><div class="ph-title">Create a New Quiz</div><div class="ph-sub">Upload chapter photos and AI builds the quiz automatically.</div></div>'+
+    (!window._apiKey?'<div class="status-bar status-err" style="margin-bottom:14px"><div>⚠️</div><div class="status-text">No API key set. <button class="btn btn-sm btn-outline" onclick="showView(\'settings\')" style="margin-left:8px">Add key →</button></div></div>':'')+
+    '<div class="card"><div class="sdiv">Step 1 — Details</div>'+
+      '<div class="form-group"><label class="form-label">Quiz name</label><input class="form-input" id="quiz-name" placeholder="e.g. Chapter 9 History Test" /></div>'+
+      '<div class="form-grid"><div class="form-group" style="margin-bottom:0"><label class="form-label">Student</label><select class="form-select" id="quiz-student">'+opts+'</select></div>'+
+      '<div class="form-group" style="margin-bottom:0"><label class="form-label">Subject</label><input class="form-input" id="quiz-subject" placeholder="e.g. History" /></div></div></div>'+
+    '<div class="card"><div class="sdiv">Step 2 — Upload photos</div>'+
+      '<p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px">Take photos of all textbook pages, study guides, and worksheets that will be on the test.</p>'+
+      '<div class="upload-zone" id="upload-zone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)"><input type="file" accept="image/*" multiple onchange="handleFileSelect(event)" /><div style="font-size:32px;margin-bottom:8px">📸</div><div style="font-size:16px;font-weight:700;margin-bottom:4px">Drop photos here or tap to browse</div><div style="font-size:13px;color:var(--ink-soft)">6–8 photos recommended · JPG or PNG · Up to 12 max</div></div>'+
+      '<div id="img-grid" class="img-grid"></div><div id="img-count" style="font-size:12px;color:var(--ink-faint);margin-top:6px;text-align:center"></div></div>'+
+    '<div class="card"><div class="sdiv">Step 3 — Notes (optional)</div>'+
+      '<div class="form-group" style="margin-bottom:0"><label class="form-label">Any notes for the AI?</label>'+
+      '<textarea class="form-input form-textarea" id="extra-notes" placeholder="e.g. Focus on vocabulary and the people matching section. She struggles with fill in the blank."></textarea>'+
+      '<div class="form-hint">The AI will generate multiple question formats (multiple choice, fill in blank, reverse) for every key fact so every concept is covered from different angles.</div></div></div>'+
+    '<div id="gen-status"></div>'+
+    '<div style="display:flex;gap:12px;align-items:center"><button class="btn btn-gold btn-lg" id="gen-btn" onclick="generateQuiz()">✨ Generate Quiz with AI</button><div style="font-size:13px;color:var(--ink-faint)">Takes ~30–60 seconds</div></div>'+
+    '<div id="quiz-preview"></div>';
+  uploadedImages=[];generatedQuizData=null;renderImgGrid();
+}
+
+window.handleDragOver=(e)=>{e.preventDefault();document.getElementById('upload-zone')?.classList.add('dragover');};
+window.handleDragLeave=()=>document.getElementById('upload-zone')?.classList.remove('dragover');
+window.handleDrop=(e)=>{e.preventDefault();document.getElementById('upload-zone')?.classList.remove('dragover');addFiles(Array.from(e.dataTransfer.files));};
+window.handleFileSelect=(e)=>addFiles(Array.from(e.target.files));
+
+function addFiles(files){
+  files.filter(f=>f.type.startsWith('image/')).slice(0,12-uploadedImages.length).forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const img=new Image();
+      img.onload=()=>{
+        const canvas=document.createElement('canvas');
+        const MAX=1024;let w=img.width,h=img.height;
+        if(w>MAX||h>MAX){if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;}}
+        canvas.width=w;canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        const dataUrl=canvas.toDataURL('image/jpeg',0.75);
+        uploadedImages.push({file:{name:file.name,type:'image/jpeg'},dataUrl});
+        renderImgGrid();
+      };
+      img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+window.removeImage=(i)=>{uploadedImages.splice(i,1);renderImgGrid();};
+
+function renderImgGrid(){
+  const g=document.getElementById('img-grid');
+  const c=document.getElementById('img-count');
+  if(g)g.innerHTML=uploadedImages.map((img,i)=>'<div class="img-thumb"><img src="'+img.dataUrl+'" /><button class="rm-btn" onclick="removeImage('+i+')">✕</button><div class="img-num">'+(i+1)+'</div></div>').join('');
+  if(c){
+    const kb=Math.round(uploadedImages.reduce((s,img)=>s+img.dataUrl.length*0.75/1024,0));
+    const warn=kb>4000?' <span style="color:var(--red)">⚠️ Too large — remove some images</span>':
+      uploadedImages.length>8?' <span style="color:var(--gold-dk)">⚠️ '+uploadedImages.length+' photos — may timeout. 6-8 is ideal.</span>':
+      ' <span style="color:var(--ink-faint)">(~'+kb+'KB)</span>';
+    c.innerHTML=uploadedImages.length>0?uploadedImages.length+' image'+(uploadedImages.length!==1?'s':'')+warn:'';
+  }
+}
+
+window.generateQuiz=async()=>{
+  const name=(document.getElementById('quiz-name')?.value||'').trim();
+  const studentId=document.getElementById('quiz-student')?.value;
+  const subject=(document.getElementById('quiz-subject')?.value||'').trim();
+  const notes=(document.getElementById('extra-notes')?.value||'').trim();
+  if(!name){toast('Enter a quiz name');return;}
+  if(!studentId){toast('Select a student');return;}
+  if(!uploadedImages.length){toast('Upload at least one image');return;}
+  if(!window._apiKey){toast('Add your API key in Settings first');return;}
+
+  const student=students.find(s=>s.id===studentId);
+  const grade=student?.grade||'5';
+  const gradeCtx={'K':'Kindergarten (age 5-6). Use the simplest possible words. 3 answer choices max.','1':'1st grade (age 6-7). Very simple vocabulary. 3 answer choices. Very short questions.','2':'2nd grade (age 7-8). Simple clear language. 3-4 choices. Short questions.','3':'3rd grade (age 8-9). Clear language. 4 choices. Helpful hints.','4':'4th grade (age 9-10). Clear language with some academic vocab. 4 plausible choices.','5':'5th grade (age 10-11). Standard academic language. 4 choices with good distractors.','6':'6th grade (age 11-12). Solid academic language. 4 nuanced choices.','7':'7th grade (age 12-13). Academic language. 4 challenging choices. Subtle hints.','8':'8th grade (age 13-14). Full academic language. Complex questions. Sophisticated distractors.'}[grade]||'5th grade';
+
+  const btn=document.getElementById('gen-btn');if(btn)btn.disabled=true;
+  document.getElementById('gen-status').innerHTML='<div class="status-bar status-loading" style="margin-top:14px"><div class="spinner"></div><div><div class="status-text">Analyzing your images...</div></div></div>';
+
+  try{
+    const content=[];
+    uploadedImages.forEach(img=>content.push({type:'image',source:{type:'base64',media_type:'image/jpeg',data:img.dataUrl.split(',')[1]}}));
+
+    const promptText=`You are building a comprehensive study quiz for: ${gradeCtx}
+
+Quiz: "${name}"
+Student: "${student?.name||''}" Grade ${grade}
+Subject: "${subject||'General'}"
+Parent notes: "${notes||'none'}"
+
+CRITICAL RULES:
+1. Read ALL images carefully — every vocabulary word, every person, every fact, every date.
+2. For EACH key fact or concept, generate MULTIPLE question formats so students encounter it from different angles:
+   - Multiple choice (mc): Ask the question directly with 4 plausible choices
+   - Fill in blank (fill): Create a sentence with the answer blanked out
+   - Reverse (mc with type "reverse"): Give the answer/definition and ask for the term/name
+3. Answers must match EXACTLY what is written in the study guide/textbook — do not paraphrase.
+4. Every important fact from the images MUST become at least one question. Do not skip anything.
+5. Generate 20-40 questions total depending on content. More content = more questions.
+
+Return ONLY valid JSON, no markdown, no backticks:
+
+{"title":"...","subject":"...","grade":"${grade}","sections":[
+  {"id":"vocab","name":"Vocabulary","questions":[
+    {"id":"v1","type":"mc","q":"What does [term] mean?","ans":"[exact definition from text]","choices":["correct","wrong1","wrong2","wrong3"]},
+    {"id":"v1r","type":"reverse","q":"[exact definition from text] — what is this term?","ans":"[term]","choices":["correct","wrong1","wrong2","wrong3"]},
+    {"id":"v1f","type":"fill","q":"A ___ is [partial definition].","ans":"[term]","hint":"[helpful hint for grade]"}
+  ]},
+  {"id":"people","name":"Key People","questions":[
+    {"id":"p1","type":"mc","q":"What did [person] do?","ans":"[exact answer]","choices":["correct","wrong1","wrong2","wrong3"]},
+    {"id":"p1r","type":"reverse","q":"[what they did] — who is this person?","ans":"[name]","choices":["correct","wrong1","wrong2","wrong3"]}
+  ]},
+  {"id":"facts","name":"Key Facts","questions":[
+    {"id":"f1","type":"mc","q":"...","ans":"...","choices":["..."]},
+    {"id":"f1f","type":"fill","q":"sentence with ___ blank","ans":"answer","hint":"hint"}
+  ]}
+]}
+
+Only include sections that have real content from the images. Ensure all answers are 100% accurate to the source material.`;
+
+    content.push({type:'text',text:promptText});
+    document.getElementById('gen-status').innerHTML='<div class="status-bar status-loading" style="margin-top:14px"><div class="spinner"></div><div><div class="status-text">Building your quiz...</div></div></div>';
+
+    // PROXY_URL is set below — update it after deploying the proxy to Render
+    const PROXY_URL = window._proxyUrl || 'https://studycoach-proxy.onrender.com';
+    let resp;
+    try {
+      resp = await fetch(PROXY_URL + '/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ apiKey: window._apiKey, model: 'claude-sonnet-4-20250514', max_tokens: 6000, messages: [{ role: 'user', content }] })
+      });
+    } catch(fetchErr) {
+      throw new Error('Could not reach the quiz generator. Check your internet connection. (' + fetchErr.message + ')');
+    }
+    if(!resp.ok){
+      let errMsg='API error '+resp.status;
+      try{const e=await resp.json();errMsg=e.error?.message||errMsg;}catch(ex){}
+      if(resp.status===401)errMsg='Invalid API key — check your key in Settings.';
+      if(resp.status===429)errMsg='Rate limit hit — wait a moment and try again.';
+      throw new Error(errMsg);
+    }
+    const data=await resp.json();
+    if(data.error)throw new Error(data.error.message);
+    const raw=data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+    generatedQuizData=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    document.getElementById('gen-status').innerHTML='<div class="status-bar status-ok" style="margin-top:14px"><div>✅</div><div class="status-text">Quiz generated! Review and save below.</div></div>';
+    renderQuizPreview(generatedQuizData,studentId);
+  }catch(err){
+    console.error(err);
+    document.getElementById('gen-status').innerHTML='<div class="status-bar status-err" style="margin-top:14px"><div>❌</div><div class="status-text">'+err.message+'</div></div>';
+    if(btn)btn.disabled=false;
+  }
+};
+
+function renderQuizPreview(qd,studentId){
+  const allQ=qd.sections.flatMap(s=>s.questions);
+  const area=document.getElementById('quiz-preview');if(!area)return;
+  const sHtml=qd.sections.map(s=>'<div style="margin-bottom:14px"><div class="sdiv">'+s.name+' ('+s.questions.length+')</div>'+
+    s.questions.slice(0,4).map(q=>'<div class="qp"><div class="qp-type">'+q.type+'</div><div class="qp-q">'+q.q+'</div><div class="qp-a">✓ '+q.ans+'</div></div>').join('')+
+    (s.questions.length>4?'<div style="font-size:12px;color:var(--ink-faint)">+'+(s.questions.length-4)+' more</div>':'')+'</div>').join('');
+  area.innerHTML='<div class="card" style="margin-top:18px"><div class="sdiv">Quiz Preview — '+allQ.length+' questions</div>'+sHtml+
+    '<div style="display:flex;gap:10px;margin-top:8px"><button class="btn btn-gold btn-lg" onclick="saveQuiz(\''+studentId+'\')">💾 Save Quiz</button><button class="btn btn-outline" onclick="generateQuiz()">🔄 Regenerate</button></div></div>';
+}
+
+window.saveQuiz=async(studentId)=>{
+  if(!generatedQuizData||!currentUser)return;
+  const name=(document.getElementById('quiz-name')?.value||'Untitled').trim();
+  const subject=(document.getElementById('quiz-subject')?.value||'').trim();
+  const student=students.find(s=>s.id===studentId);
+  await addDoc(collection(db,'users',currentUser.uid,'students',studentId,'quizzes'),{
+    name,subject,studentName:student?.name||'',grade:student?.grade||'5',
+    questions:generatedQuizData.sections.flatMap(s=>s.questions),
+    sections:generatedQuizData.sections,createdAt:serverTimestamp()
+  });
+  activeStudentId=studentId;activeQuizzes=await loadQuizzes(studentId);
+  toast('Quiz saved! 🎉');showView('quizzes');
+};
+
+// ── REWARDS ──
+async function loadRewards(){if(!currentUser)return[];const snap=await getDocs(query(collection(db,'users',currentUser.uid,'rewards'),orderBy('points')));return snap.docs.map(d=>({id:d.id,...d.data()}));}
+
+async function loadPendingRedemptions(){
+  if(!currentUser)return[];
+  const pending=[];
+  for(const s of students){
+    const snap=await getDocs(query(collection(db,'users',currentUser.uid,'students',s.id,'redemptions'),orderBy('createdAt','desc')));
+    snap.docs.forEach(d=>{if(d.data().status==='pending')pending.push({id:d.id,studentId:s.id,studentName:s.name,studentEmoji:s.emoji||'🎒',...d.data()});});
+  }
+  return pending;
+}
+
+async function checkNotifBadge(){
+  try{const p=await loadPendingRedemptions();const b=document.getElementById('notif-badge');if(b){b.textContent=p.length;b.style.display=p.length>0?'inline-flex':'none';}}catch(e){}
+}
+
+async function renderRewardsView(){
+  const mc=document.getElementById('main-content');
+  mc.innerHTML='<div class="ph"><div class="ph-title">🎁 Rewards</div><div class="ph-sub">Loading...</div></div>';
+  const [rewards,pending]=await Promise.all([loadRewards(),loadPendingRedemptions()]);
+  const RICONS=['🎁','🍕','🎮','🎬','🍦','⏰','📱','🎨','🎠','🏆','🌟','🏄','🎭','🧩','🎪','🛒','🎤','🎯','🍔','🎈'];
+  const pendingHtml=pending.length?pending.map(r=>'<div class="notif-card"><div class="notif-title">'+r.studentEmoji+' '+r.studentName+' wants: <strong>'+r.rewardName+'</strong></div><div class="notif-sub">Costs '+r.points+' XP</div><div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-gold btn-sm" onclick="approveRedemption(\''+r.studentId+'\',\''+r.id+'\','+r.points+')">✓ Approve & deduct XP</button><button class="btn btn-danger btn-sm" onclick="dismissRedemption(\''+r.studentId+'\',\''+r.id+'\')">✕ Dismiss</button></div></div>').join(''):'<div style="font-size:14px;color:var(--ink-faint)">No pending redemptions.</div>';
+  const rewardRows=rewards.length?rewards.map(r=>'<div class="reward-card"><div style="font-size:28px;flex-shrink:0">'+(r.icon||'🎁')+'</div><div style="flex:1"><div style="font-size:14px;font-weight:700">'+r.name+'</div><div style="font-size:12px;color:var(--ink-faint)">⭐ '+r.points+' XP to unlock</div></div><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm" onclick="editReward(\''+r.id+'\')">Edit</button><button class="btn btn-danger btn-sm" onclick="deleteReward(\''+r.id+'\')">✕</button></div></div>').join(''):'<div style="font-size:14px;color:var(--ink-faint);padding:8px 0">No rewards yet — add one below!</div>';
+  mc.innerHTML='<div class="ph"><div class="ph-title">🎁 Rewards</div><div class="ph-sub">Set rewards kids can earn with XP, and approve redemptions here.</div></div>'+
+    (pending.length?'<div class="card" style="border-color:rgba(200,146,42,.4)"><div class="sdiv" style="color:var(--gold-dk)">⚡ Pending Redemptions ('+pending.length+')</div>'+pendingHtml+'</div>':'')+
+    '<div class="card"><div class="sdiv">Your Rewards</div>'+rewardRows+'</div>'+
+    '<div class="card"><div class="sdiv">Add a New Reward</div>'+
+      '<div class="form-group"><label class="form-label">Icon</label><div id="reward-icon-picker" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px">'+
+        RICONS.map(e=>'<button onclick="selectRewardIcon(\''+e+'\')" style="font-size:20px;padding:4px;border-radius:7px;border:2px solid var(--cream-dd);background:white;cursor:pointer;line-height:1" id="ri-'+e.codePointAt(0)+'">'+e+'</button>').join('')+
+      '</div><input type="hidden" id="new-reward-icon" value="🎁" /></div>'+
+      '<div class="form-grid">'+
+        '<div class="form-group" style="margin-bottom:0"><label class="form-label">Reward name</label><input class="form-input" id="new-reward-name" placeholder="e.g. 30 min extra screen time" /></div>'+
+        '<div class="form-group" style="margin-bottom:0"><label class="form-label">XP points required</label><input class="form-input" id="new-reward-pts" type="number" min="1" placeholder="e.g. 100" /></div>'+
+      '</div>'+
+      '<div style="margin-top:14px"><button class="btn btn-gold" onclick="addReward()">➕ Add Reward</button></div>'+
+    '</div>';
+  selectRewardIcon('🎁');
+}
+
+window.selectRewardIcon=(e)=>{
+  document.getElementById('new-reward-icon').value=e;
+  document.querySelectorAll('#reward-icon-picker button').forEach(b=>{b.style.borderColor='var(--cream-dd)';b.style.background='white';});
+  const btn=document.getElementById('ri-'+e.codePointAt(0));
+  if(btn){btn.style.borderColor='var(--gold)';btn.style.background='var(--gold-bg)';}
+};
+window.addReward=async()=>{
+  const name=(document.getElementById('new-reward-name')?.value||'').trim();
+  const pts=parseInt(document.getElementById('new-reward-pts')?.value||'0');
+  const icon=document.getElementById('new-reward-icon')?.value||'🎁';
+  if(!name){toast('Enter a reward name');return;}if(!pts||pts<1){toast('Enter a valid XP amount');return;}
+  await addDoc(collection(db,'users',currentUser.uid,'rewards'),{name,points:pts,icon,createdAt:serverTimestamp()});
+  toast('Reward added! 🎁');renderRewardsView();
+};
+window.deleteReward=async(id)=>{if(!confirm('Delete this reward?'))return;await deleteDoc(doc(db,'users',currentUser.uid,'rewards',id));toast('Deleted');renderRewardsView();};
+window.editReward=async(id)=>{
+  const rewards=await loadRewards();const r=rewards.find(x=>x.id===id);if(!r)return;
+  const newName=prompt('Reward name:',r.name);if(!newName)return;
+  const newPts=parseInt(prompt('XP required:',r.points)||'0');if(!newPts||newPts<1){toast('Invalid XP');return;}
+  await updateDoc(doc(db,'users',currentUser.uid,'rewards',id),{name:newName,points:newPts});
+  toast('Updated!');renderRewardsView();
+};
+window.approveRedemption=async(studentId,redemptionId,pts)=>{
+  await updateDoc(doc(db,'users',currentUser.uid,'students',studentId,'redemptions',redemptionId),{status:'approved',approvedAt:serverTimestamp()});
+  const snap=await getDoc(doc(db,'users',currentUser.uid,'students',studentId));
+  const curXP=snap.data()?.totalXP||0;
+  await updateDoc(doc(db,'users',currentUser.uid,'students',studentId),{totalXP:Math.max(0,curXP-pts)});
+  toast('Approved! XP deducted ✓');checkNotifBadge();renderRewardsView();
+};
+window.dismissRedemption=async(studentId,redemptionId)=>{
+  await updateDoc(doc(db,'users',currentUser.uid,'students',studentId,'redemptions',redemptionId),{status:'dismissed'});
+  toast('Dismissed');checkNotifBadge();renderRewardsView();
+};
+
+// ── SETTINGS ──
+function renderSettingsView(){
+  const mc=document.getElementById('main-content');
+  mc.innerHTML='<div class="ph"><div class="ph-title">Settings</div></div>'+
+    '<div class="apikey-box">'+
+      '<div class="apikey-title">🔑 Anthropic API Key</div>'+
+      '<div class="apikey-sub">Generating a quiz costs roughly $0.10–$0.30. Anthropic gives you $5 in free credits on signup. Note: your Claude.ai subscription is separate from the API.</div>'+
+      '<div style="background:rgba(255,255,255,.07);border-radius:8px;padding:12px;margin:12px 0;font-size:13px;color:rgba(255,255,255,.65);line-height:1.7">'+
+        '<div style="font-weight:700;color:rgba(255,255,255,.9);margin-bottom:4px">How to get your key:</div>'+
+        '<div>1. Go to <a href="https://console.anthropic.com" target="_blank" style="color:var(--gold)">console.anthropic.com</a> and sign up</div>'+
+        '<div>2. Click API Keys → Create Key</div><div>3. Copy and paste it below</div></div>'+
+      '<div class="apikey-row"><input class="apikey-input" id="api-key-input" type="password" placeholder="sk-ant-..." value="'+(window._apiKey||'')+'" /><button class="btn btn-gold" onclick="saveApiKey()">Save</button></div>'+
+      '<div id="apikey-status">'+(window._apiKey?'<span class="apikey-ok">✓ API key saved</span>':'')+'</div>'+
+    '</div>'+
+    '<div class="card"><div class="sdiv">Account & Security</div>'+
+      '<p style="font-size:14px;color:var(--ink-soft);margin-bottom:14px">Signed in as <strong>'+(currentUser?.email||'')+'</strong></p>'+
+      '<div style="display:flex;gap:8px;flex-wrap:wrap">'+
+        '<button class="btn btn-outline btn-sm" onclick="changePin()">🔒 Change Parent PIN</button>'+
+        '<button class="btn btn-danger btn-sm" onclick="doSignOut()">Sign out</button>'+
+      '</div></div>';
+}
+
+// ── STUDENT DASHBOARD ──
+window.openStudentDashboard=async(autoQuizId)=>{
+  document.getElementById('student-app').classList.add('visible');
+  window._studyInStuApp=false;
+  if(autoQuizId&&activeStudentId){
+    stuCurrentStudentId=activeStudentId;
+    const snap=await getDocs(query(collection(db,'users',currentUser.uid,'students',activeStudentId,'quizzes'),orderBy('createdAt','desc')));
+    stuQuizzes=snap.docs.map(d=>({id:d.id,...d.data()}));
+    const student=students.find(s=>s.id===activeStudentId);
+    await stuLaunchQuiz(autoQuizId,student);
+  } else { renderStuWhosPicking(); }
+};
+
+window.closeStudentDashboard=()=>{document.getElementById('student-app').classList.remove('visible');window._studyInStuApp=false;};
+
+function renderStuWhosPicking(){
+  window._studyInStuApp=false;stuCurrentStudentId=null;
+  const body=document.getElementById('stu-body');
+  if(!students||!students.length){body.innerHTML='<div class="stu-empty"><div style="font-size:48px;margin-bottom:12px">📚</div><div style="font-family:Fraunces,serif;font-size:20px;font-weight:700;margin-bottom:6px">No students yet</div><div>Ask your parent to set up your profile!</div></div>';return;}
+  if(students.length===1){stuCurrentStudentId=students[0].id;loadStuQuizzes(students[0].id);return;}
+  body.innerHTML='<div style="padding:28px 0 16px;text-align:center"><div class="stu-who-title">Who\'s studying today? 👋</div><div style="font-size:15px;color:var(--ink-soft)">Tap your name</div></div>'+
+    '<div class="stu-picker">'+students.map(s=>'<div class="stu-pick-card" onclick="stuPickStudent(\''+s.id+'\')">'+'<div class="stu-pick-emoji">'+(s.emoji||'🎒')+'</div><div class="stu-pick-name">'+s.name+'</div><div class="stu-pick-grade">Grade '+s.grade+'</div></div>').join('')+'</div>';
+}
+
+window.stuPickStudent=(id)=>{stuCurrentStudentId=id;loadStuQuizzes(id);};
+
+async function loadStuQuizzes(studentId){
+  const student=students.find(s=>s.id===studentId);
+  const body=document.getElementById('stu-body');
+  body.innerHTML='<div style="text-align:center;padding:40px;color:var(--ink-faint)">Loading...</div>';
+  try{
+    const snap=await getDocs(query(collection(db,'users',currentUser.uid,'students',studentId,'quizzes'),orderBy('createdAt','desc')));
+    stuQuizzes=snap.docs.map(d=>({id:d.id,...d.data()}));
+    const stuSnap=await getDoc(doc(db,'users',currentUser.uid,'students',studentId));
+    const totalXP=stuSnap.data()?.totalXP||0;
+    renderStuQuizList(student,totalXP);
+  }catch(e){body.innerHTML='<div class="stu-empty">Could not load. Please try again.</div>';}
+}
+
+function renderStuQuizList(student,totalXP){
+  const body=document.getElementById('stu-body');
+  const g=parseInt(student?.grade||5);
+  const name=student?.name||'there';
+  const greeting=gPick(g,'Hi '+name+'! Ready to learn? 🌟','Hey '+name+'! Let\'s study! 👋','Hey '+name+'!','Hi '+name+'.');
+  const backBtn=students.length>1?'<button class="stu-back-btn" onclick="renderStuWhosPicking()">← Back</button>':'';
+  const quizCards=stuQuizzes.length>0
+    ?stuQuizzes.map(q=>'<div class="stu-quiz-card" onclick="stuPickQuiz(\''+q.id+'\')">'+'<div style="font-size:32px;flex-shrink:0">📚</div><div><div class="stu-quiz-name">'+q.name+'</div><div class="stu-quiz-meta">'+(q.subject||'General')+' · '+(q.questions?.length||0)+' questions</div></div><div style="font-size:18px;color:var(--cream-dd);margin-left:auto">→</div></div>').join('')
+    :'<div class="stu-empty"><div style="font-size:40px;margin-bottom:10px">📖</div><div style="font-family:Fraunces,serif;font-size:17px;font-weight:700;margin-bottom:5px">No quizzes yet!</div><div>Ask your parent to create a quiz for you.</div></div>';
+  updateStuHeader(student?.name ? student.name + "'s Quizzes" : 'My Quizzes');
+  body.innerHTML=backBtn+
+    '<div style="text-align:center;padding:20px 0 16px">'+
+      '<div style="font-size:48px;margin-bottom:8px">'+(student?.emoji||'🎒')+'</div>'+
+      '<div style="font-family:Fraunces,serif;font-size:22px;font-weight:900;margin-bottom:10px">'+greeting+'</div>'+
+      '<div class="stu-xp-pill"><span class="stu-xp-num">⭐ '+totalXP+' XP</span>'+
+        '<button onclick="stuShowRewards()" style="padding:5px 12px;border-radius:99px;border:1.5px solid var(--gold);background:var(--gold);color:white;font-size:12px;font-weight:700;font-family:DM Sans,sans-serif;cursor:pointer">🎁 Rewards</button></div>'+
+    '</div>'+quizCards;
+}
+
+window.stuPickQuiz=async(quizId)=>{
+  const student=students.find(s=>s.id===stuCurrentStudentId);
+  await stuLaunchQuiz(quizId,student);
+};
+
+async function stuLaunchQuiz(quizId,student){
+  let quiz=stuQuizzes.find(q=>q.id===quizId);
+  if(!quiz){
+    const snap=await getDocs(query(collection(db,'users',currentUser.uid,'students',student?.id||stuCurrentStudentId,'quizzes'),orderBy('createdAt','desc')));
+    stuQuizzes=snap.docs.map(d=>({id:d.id,...d.data()}));
+    quiz=stuQuizzes.find(q=>q.id===quizId);
+  }
+  if(!quiz||!student)return;
+  window._activeQuiz=quiz;activeStudentId=stuCurrentStudentId;
+  window._studyInStuApp=true;resetStudentState();
+  updateStuHeader('📖 ' + (quiz?.name || 'Studying'));
+  try{const snap=await getDoc(doc(db,'users',currentUser.uid,'students',stuCurrentStudentId));xp=snap.data()?.totalXP||0;}catch(e){xp=0;}
+  renderStudentWelcome(student,quiz);
+}
+
+// ── STUDENT REWARDS ──
+window.stuShowRewards=async()=>{
+  const body=document.getElementById('stu-body');
+  body.innerHTML='<div style="text-align:center;padding:30px;color:var(--ink-faint)">Loading rewards...</div>';
+  try{
+    const student=students.find(s=>s.id===stuCurrentStudentId);
+    const [rewardsSnap,stuSnap,redemSnap]=await Promise.all([
+      getDocs(query(collection(db,'users',currentUser.uid,'rewards'),orderBy('points'))),
+      getDoc(doc(db,'users',currentUser.uid,'students',stuCurrentStudentId)),
+      getDocs(query(collection(db,'users',currentUser.uid,'students',stuCurrentStudentId,'redemptions'),orderBy('createdAt','desc')))
+    ]);
+    const rewards=rewardsSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const totalXP=stuSnap.data()?.totalXP||0;
+    const redemptions=redemSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const pendingIds=new Set(redemptions.filter(r=>r.status==='pending').map(r=>r.rewardId));
+    const approvedIds=new Set(redemptions.filter(r=>r.status==='approved').map(r=>r.rewardId));
+    if(!rewards.length){body.innerHTML='<button class="stu-back-btn" onclick="loadStuQuizzes(stuCurrentStudentId)">← Back</button><div class="stu-empty"><div style="font-size:48px;margin-bottom:12px">🎁</div><div style="font-family:Fraunces,serif;font-size:19px;font-weight:700;margin-bottom:6px">No rewards set up yet</div><div>Ask your parent to add some rewards!</div></div>';return;}
+    const nextReward=rewards.find(r=>totalXP<r.points&&!approvedIds.has(r.id));
+    const nextPct=nextReward?Math.min(100,Math.round(totalXP/nextReward.points*100)):100;
+    const cards=rewards.map(r=>{
+      const can=totalXP>=r.points;
+      const isPending=pendingIds.has(r.id);const isApproved=approvedIds.has(r.id);
+      const pct=Math.min(100,Math.round(totalXP/r.points*100));
+      let cls='stu-reward-card',badge='',click='';
+      if(isApproved){cls+=' redeemed';badge='<span style="font-size:11px;font-weight:700;color:var(--green-dk);background:var(--green-bg);padding:2px 8px;border-radius:99px">✓ Redeemed</span>';}
+      else if(isPending){cls+=' pending';badge='<span style="font-size:11px;font-weight:700;color:var(--blue-dk);background:var(--blue-bg);padding:2px 8px;border-radius:99px">⏳ Waiting for parent</span>';}
+      else if(can){cls+=' unlocked';click='onclick="stuRedeemReward(\''+r.id+'\',\''+esc(r.name)+'\','+r.points+',\''+(r.icon||'🎁')+'\')"';badge='<span style="font-size:11px;font-weight:700;color:var(--gold-dk);background:var(--gold-bg);padding:2px 8px;border-radius:99px">✨ Tap to redeem!</span>';}
+      return '<div class="'+cls+'" '+click+'>'+'<div style="font-size:28px;flex-shrink:0">'+(r.icon||'🎁')+'</div>'+
+        '<div style="flex:1"><div style="font-size:15px;font-weight:700;margin-bottom:2px">'+r.name+'</div>'+
+        '<div style="font-size:12px;color:var(--ink-faint);margin-bottom:4px">⭐ '+r.points+' XP'+((!can&&!isApproved)?(' · You have '+totalXP):'')+' </div>'+
+        (!isApproved&&!isPending?'<div class="stu-rwd-bar-bg"><div class="stu-rwd-bar-fill" style="width:'+pct+'%"></div></div>':'')+
+        '<div style="margin-top:5px">'+badge+'</div></div></div>';
+    }).join('');
+    const nextXpHtml=nextReward
+      ?'<div style="font-size:13px;color:var(--ink-faint);">'+(nextReward.points-totalXP)+' more XP to unlock <strong>'+nextReward.name+'</strong></div><div style="max-width:280px;margin:8px auto 0;background:var(--cream-dd);border-radius:99px;height:10px;overflow:hidden"><div style="height:10px;border-radius:99px;background:linear-gradient(90deg,var(--gold),#e8a020);width:'+nextPct+'%"></div></div>'
+      :'<div style="font-size:13px;color:var(--green-dk);font-weight:700">You\'ve unlocked all rewards! 🌟</div>';
+    body.innerHTML='<button class="stu-back-btn" onclick="loadStuQuizzes(stuCurrentStudentId)">← Back to quizzes</button>'+
+      '<div style="text-align:center;padding:16px 0 20px">'+
+        '<div style="font-size:32px;margin-bottom:6px">🏆</div>'+
+        '<div style="font-family:Fraunces,serif;font-size:22px;font-weight:900;margin-bottom:4px">'+(student?.name||'')+' Rewards</div>'+
+        '<div style="font-size:26px;font-weight:800;color:var(--gold);font-family:Fraunces,serif;margin-bottom:6px">⭐ '+totalXP+' XP</div>'+
+        nextXpHtml+'</div>'+cards;
+  }catch(e){body.innerHTML='<div class="stu-empty">Could not load rewards. Please try again.</div>';}
+};
+
+window.stuRedeemReward=(rewardId,rewardName,pts,icon)=>{
+  const overlay=document.createElement('div');overlay.className='overlay';overlay.id='redeem-confirm';
+  overlay.innerHTML='<div style="background:var(--cream);border-radius:20px;padding:36px 28px;max-width:360px;width:90%;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.4)">'+
+    '<div style="font-size:52px;margin-bottom:10px">'+icon+'</div>'+
+    '<div style="font-family:Fraunces,serif;font-size:21px;font-weight:900;margin-bottom:6px">Redeem this reward?</div>'+
+    '<div style="font-size:15px;font-weight:700;margin-bottom:4px">'+rewardName+'</div>'+
+    '<div style="font-size:13px;color:var(--ink-soft);margin-bottom:20px">Costs ⭐ '+pts+' XP · Your parent will approve it!</div>'+
+    '<div style="display:flex;gap:10px">'+
+      '<button class="btn btn-gold" style="flex:1;padding:12px" onclick="confirmRedeem(\''+rewardId+'\',\''+esc(rewardName)+'\','+pts+',\''+icon+'\')">Yes, I want it!</button>'+
+      '<button class="btn btn-outline" style="flex:1;padding:12px" onclick="document.getElementById(\'redeem-confirm\').remove()">Cancel</button>'+
+    '</div></div>';
+  document.body.appendChild(overlay);
+};
+
+window.confirmRedeem=async(rewardId,rewardName,pts,icon)=>{
+  document.getElementById('redeem-confirm')?.remove();
+  try{
+    await addDoc(collection(db,'users',currentUser.uid,'students',stuCurrentStudentId,'redemptions'),{rewardId,rewardName,points:pts,icon,status:'pending',createdAt:serverTimestamp()});
+    checkNotifBadge();
+    const body=document.getElementById('stu-body');
+    body.innerHTML='<div style="text-align:center;padding:48px 16px"><div style="font-size:64px;margin-bottom:12px">🎉</div>'+
+      '<div style="font-family:Fraunces,serif;font-size:26px;font-weight:900;margin-bottom:8px">Request sent!</div>'+
+      '<div style="font-size:15px;color:var(--ink-soft);margin-bottom:24px">Your parent will see your request and approve it. Nice work earning those XP points!</div>'+
+      '<button class="btn btn-gold btn-lg" onclick="loadStuQuizzes(stuCurrentStudentId)">Back to quizzes</button></div>';
+  }catch(e){toast('Error — please try again');}
+};
+
+// ── STUDY ENGINE ──
+const CUM_XP=[0,50,130,240,380,9999];
+const LEVELS=['Apprentice','Historian','Scholar','Expert','Master'];
+let xp=0,streak=0,maxStreak=0;
+let planStep=0,curQs=[],idx=0,results={},wrongIds=[];
+let reviewResults={},reviewRound=1,reviewIdx=0;
+let fillDone=false,guideKey='',nextFlashSec='';
+let flashQs=[],flashIdx=0,flashKnew=[],flashSource='';
+
+function resetStudentState(){
+  streak=0;maxStreak=0;planStep=0;
+  curQs=[];idx=0;results={};wrongIds=[];
+  reviewResults={};reviewRound=1;reviewIdx=0;
+  fillDone=false;guideKey='';nextFlashSec='';
+  flashQs=[];flashIdx=0;flashKnew=[];flashSource='';
+  // xp is NOT reset — it accumulates across quizzes
+}
+
+function getLvl(){for(let i=CUM_XP.length-2;i>=0;i--)if(xp>=CUM_XP[i])return i;return 0;}
+
+function addXP(n){
+  const ol=getLvl();xp+=n;const nl=getLvl();
+  if(nl>ol)toast('Level up! You are now a '+LEVELS[nl]+' 🎉');
+  if(currentUser&&activeStudentId)updateDoc(doc(db,'users',currentUser.uid,'students',activeStudentId),{totalXP:xp}).catch(()=>{});
+}
+
+function hudHTML(){
+  const li=getLvl(),lo=CUM_XP[li],hi=CUM_XP[li+1],frac=li===LEVELS.length-1?1:Math.min((xp-lo)/(hi-lo),1);
+  return '<div class="s-hud"><div class="s-cell"><div class="s-val" style="color:var(--gold)">'+xp+'</div><div class="s-lbl">XP</div></div>'+
+    '<div class="s-cell"><div class="s-val" style="color:var(--blue);font-size:12px;padding-top:3px">'+LEVELS[li]+'</div><div class="s-lbl">Level</div></div>'+
+    '<div class="s-cell"><div class="s-val" style="color:var(--red)">'+streak+'🔥</div><div class="s-lbl">Streak</div></div></div>'+
+    '<div class="s-xp-track"><div class="s-xp-fill" style="width:'+Math.round(frac*100)+'%"></div></div>'+
+    '<div class="s-xp-lbl">'+(li===LEVELS.length-1?'Max level! 🏆':(xp-lo)+'/'+(hi-lo)+' XP to '+LEVELS[li+1])+'</div>';
+}
+
+function stepsHTML(active,quiz){
+  const secs=(quiz?.sections||[]).map(s=>s.name);
+  const labels=['Start',...secs,'Quiz','Drill','Final','Done!'].slice(0,8);
+  return '<div class="s-steps">'+labels.map((l,i)=>{const cls=i<active?'done':i===active?'active':'';return '<div class="s-step"><div class="s-dot '+cls+'">'+(i<active?'✓':i+1)+'</div><div class="s-slbl '+cls+'">'+l+'</div></div>';}).join('')+'</div>';
+}
+
+function typeBadge(type){
+  const map={mc:['Multiple Choice','var(--blue-bg)','var(--blue-dk)'],reverse:['Reverse','var(--purple-bg)','var(--purple-dk)'],fill:['Fill in Blank','var(--gold-bg)','var(--gold-dk)']};
+  const [label,bg,color]=map[type]||map.mc;
+  return '<div class="s-qtype-badge" style="background:'+bg+';color:'+color+'">'+label+'</div>';
+}
+
+function renderStudentWelcome(student,quiz){
+  if(!quiz){setMC('<div class="study-wrap"><div class="empty"><div class="empty-icon">📚</div><div class="empty-title">No quiz selected</div></div></div>');return;}
+  window._activeQuiz=quiz;
+  const g=parseInt(student?.grade||5);
+  const greeting=gPick(g,'Hey '+(student?.name||'there')+'! 🌟','Hey '+(student?.name||'there')+'! 👋','Hey '+(student?.name||'there')+'!','Hi '+(student?.name||'there')+'.');
+  const subMsg=gPick(g,'We\'re going to learn about <strong>'+quiz.name+'</strong>! Every single question, every format! 🎉','We\'re studying <strong>'+quiz.name+'</strong>. We\'ll go through every question — multiple choice, fill in blank, and reverse!','We\'re studying <strong>'+quiz.name+'</strong>. Every fact gets tested multiple ways so you\'re fully prepared.','Today\'s material: <strong>'+quiz.name+'</strong>. All questions, all formats — thorough preparation.');
+  const secs=quiz.sections||[];const totalQ=quiz.questions?.length||0;
+  const phases=[
+    {color:'purple',icon:'1',title:gPick(g,'Look at the flashcards! 📖','Flashcards — learn it first','Flashcards — learn it first','Phase 1 — Flashcard Review'),desc:gPick(g,'Look at each card. Try to guess, then flip to see!','Look at each card, think of the answer, then flip.','Think of your answer, then flip. Every card, every time.','Review each card. Recall before flipping for best retention.'),tag:secs.map(s=>s.name).join(' → ')},
+    {color:'blue',icon:'2',title:gPick(g,'Answer ALL the questions! ⭐','Practice quiz — all '+totalQ+' questions','Practice quiz — every question','Phase 2 — Complete Assessment'),desc:gPick(g,'Every single question! Multiple choice AND fill in blank! You get points! 🌟','Every question, every format — multiple choice, fill in blank, and reverse. Earn XP!','All '+totalQ+' questions in all formats. No shortcuts — every fact gets drilled.','Complete assessment of all material in all question formats.'),tag:'All '+totalQ+' questions, all formats'},
+    {color:'red',icon:'3',title:gPick(g,'Practice the tricky ones! 💪','Drill what you missed','Targeted review','Phase 3 — Targeted Review'),desc:gPick(g,'We\'ll keep doing the ones you got wrong until you nail them!','Only missed questions come back. Keep going until every one is correct.','Missed questions return in order until every one is mastered.','Spaced repetition on incorrect items until queue is cleared.'),tag:'Missed questions only'},
+    {color:'green',icon:'4',title:gPick(g,'Last quiz — ALL questions again! 🌟','Final quiz — prove you know it all!','Final quiz — all '+totalQ+' questions','Phase 4 — Final Assessment'),desc:gPick(g,'We go through ALL the questions one more time! Show what you learned! 🌟','One more full pass — every question, every format. Prove you\'re ready.','Complete final run-through. All questions, all formats.','Full re-assessment of all material. True readiness indicator.'),tag:'All '+totalQ+' questions again'}
+  ];
+  const phaseCards=phases.map(p=>'<div class="s-phase-card" style="border-color:var(--'+p.color+')"><div class="s-phase-num" style="background:var(--'+p.color+'-bg);color:var(--'+p.color+'-dk)">'+p.icon+'</div><div class="s-phase-body"><h3>'+p.title+'</h3><p>'+p.desc+'</p><div class="s-ptag" style="background:var(--'+p.color+'-bg);color:var(--'+p.color+'-dk)">'+p.tag+'</div></div></div>').join('');
+  const welcomeIcon=gPick(g,'🌟','👋','👋','📋');
+  setMC('<div class="study-wrap">'+hudHTML()+
+    '<div class="s-card" style="text-align:center;padding:1.8rem 1.5rem;margin-bottom:10px">'+
+      '<div style="font-size:48px;margin-bottom:10px">'+welcomeIcon+'</div>'+
+      '<div style="font-family:Fraunces,serif;font-size:22px;font-weight:900;margin-bottom:8px">'+greeting+'</div>'+
+      '<div style="font-size:14px;color:var(--ink-soft);line-height:1.6;margin-bottom:20px">'+subMsg+'</div>'+
+      '<button class="btn btn-gold btn-lg" style="width:100%" onclick="studentStartPlan()">Let\'s start! →</button>'+
+    '</div>'+
+    '<div class="s-card"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);margin-bottom:10px">Your study plan</div>'+phaseCards+'</div>'+
+    '<div style="text-align:center;margin-top:8px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">'+
+      '<button class="btn btn-outline btn-sm" onclick="renderFreePlay()">Skip to free practice →</button>'+
+      '<button class="btn btn-outline btn-sm" onclick="stuGoHome()">🏠 My Quizzes</button>'+
+    '</div>'+
+  '</div>');
+}
+
+function studentStartPlan(){
+  const quiz=window._activeQuiz;
+  if(!quiz||!quiz.sections||!quiz.sections.length)return;
+  planStep=1;startFlashSection(quiz.sections[0].id);
+}
+
+// ── FLASHCARDS ──
+function startFlashSection(secId){
+  flashSource=secId;
+  const quiz=window._activeQuiz;
+  const sec=quiz?.sections?.find(s=>s.id===secId);if(!sec)return;
+  // Go through ALL questions in order (no shuffle skipping)
+  flashQs=shuffle(sec.questions);flashIdx=0;flashKnew=[];renderFlash();
+}
+
+function renderFlash(){
+  const quiz=window._activeQuiz;
+  const student=students.find(s=>s.id===activeStudentId);
+  const g=parseInt(student?.grade||5);
+  const sec=quiz?.sections?.find(s=>s.id===flashSource);
+  const secName=sec?.name||'';
+  const el=stuEl();if(!el)return;
+
+  if(flashIdx>=flashQs.length){
+    const knew=flashKnew.length,total=flashQs.length,pct=Math.round(knew/total*100);
+    el.innerHTML='<div class="study-wrap">'+hudHTML()+stepsHTML(planStep,quiz)+
+      '<div class="s-card" style="text-align:center;padding:1.75rem 1.5rem">'+
+        '<div style="font-size:38px;margin-bottom:8px">'+(pct>=80?'🌟':pct>=50?'👍':'📚')+'</div>'+
+        '<div style="font-family:Fraunces,serif;font-size:18px;font-weight:800;margin-bottom:5px">'+secName+' done!</div>'+
+        '<div style="font-size:13px;color:var(--ink-soft);margin-bottom:14px">You knew <strong>'+knew+' of '+total+'</strong> '+gPick(g,'— amazing! 🌟','— great work!','right away.','without assistance.')+'</div>'+
+        '<div style="display:flex;gap:8px;justify-content:center;margin-bottom:14px">'+
+          '<div style="background:var(--green-bg);border-radius:var(--r);padding:9px 18px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--green-dk);font-family:Fraunces,serif">'+knew+'</div><div style="font-size:10px;color:var(--green-dk);margin-top:2px">Knew it</div></div>'+
+          '<div style="background:var(--red-bg);border-radius:var(--r);padding:9px 18px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--red-dk);font-family:Fraunces,serif">'+(total-knew)+'</div><div style="font-size:10px;color:var(--red-dk);margin-top:2px">Still learning</div></div>'+
+        '</div>'+
+        '<button class="btn btn-gold btn-lg" style="width:100%" onclick="afterFlashSection()">'+flashNextLabel(quiz)+'</button>'+
+      '</div></div>';
+    return;
+  }
+
+  const q=flashQs[flashIdx];
+  const coachMsg=gPick(g,'Look at this card! Try to guess — then tap to flip! 🌟','Think of your answer — then <strong>tap to flip!</strong>','Think of your answer — then <strong>tap the card</strong> to flip it.','Recall before flipping — active retrieval strengthens memory.');
+  el.innerHTML='<div class="study-wrap">'+hudHTML()+stepsHTML(planStep,quiz)+
+    '<div class="s-coach"><div class="s-av">'+gPick(g,'🌟','🧑‍🏫','🧑‍🏫','📋')+'</div><div class="s-bubble"><p>'+coachMsg+'</p></div></div>'+
+    '<div class="s-prog-wrap"><div class="s-prog-lbl">Card '+(flashIdx+1)+' of '+flashQs.length+'</div><div class="s-prog-bg"><div class="s-prog-fill" style="width:'+Math.round(flashIdx/flashQs.length*100)+'%"></div></div><div class="s-prog-pct">'+Math.round(flashIdx/flashQs.length*100)+'%</div></div>'+
+    '<div class="s-fc-wrap"><div class="s-fc-inner" id="sfc" onclick="flipCard()">'+
+      '<div class="s-fc-face s-fc-front"><div class="s-fc-tag">📖 '+secName+' — tap to flip</div><div class="s-fc-q">'+q.q+'</div><div class="s-fc-tap">'+gPick(g,'👆 Tap me!','👆 Tap to flip!','👆 Tap anywhere','👆 Tap to reveal')+'</div></div>'+
+      '<div class="s-fc-face s-fc-back"><div class="s-fc-tag">✅ Answer</div><div class="s-fc-a">'+q.ans+'</div></div>'+
+    '</div></div>'+
+    '<div id="judge-area" style="min-height:55px"></div>'+
+  '</div>';
+}
+
+window.flipCard=()=>{
+  const fc=document.getElementById('sfc');if(!fc)return;
+  fc.classList.toggle('flipped');
+  if(fc.classList.contains('flipped')){
+    const student=students.find(s=>s.id===activeStudentId);const g=parseInt(student?.grade||5);
+    document.getElementById('judge-area').innerHTML=
+      '<div style="font-size:12px;font-weight:700;color:var(--ink-faint);text-align:center;margin-bottom:7px">'+gPick(g,'Did you get it? 🤔','Did you know it?','Were you right?','Did you recall it?')+'</div>'+
+      '<div class="s-judge">'+
+        '<button class="s-yes" onclick="flashJudge(true)">'+gPick(g,'✅ Yes! 🌟','✅ Yes, I knew it!','✅ Yes! (+5 XP)','✅ Recalled (+5 XP)')+'</button>'+
+        '<button class="s-no" onclick="flashJudge(false)">'+gPick(g,'❌ Not yet (+1)','❌ Not quite (+1)','❌ Not yet (+1)','❌ Needed flip (+1)')+'</button>'+
+      '</div>';
+  } else { document.getElementById('judge-area').innerHTML=''; }
+};
+
+window.flashJudge=(knew)=>{if(knew){flashKnew.push(flashQs[flashIdx]);addXP(5);}else{addXP(1);}flashIdx++;renderFlash();};
+
+function flashNextLabel(quiz){
+  const secs=quiz?.sections||[];const ci=secs.findIndex(s=>s.id===flashSource);
+  if(ci<secs.length-1)return'Next: '+secs[ci+1].name+' flashcards →';
+  return'All flashcards done! Start quiz →';
+}
+
+function afterFlashSection(){
+  const quiz=window._activeQuiz;const secs=quiz?.sections||[];
+  const ci=secs.findIndex(s=>s.id===flashSource);
+  if(ci<secs.length-1){planStep=ci+2;guideKey='nextFlash';nextFlashSec=secs[ci+1].id;renderGuide();}
+  else{planStep=secs.length+1;guideKey='afterAllFlash';renderGuide();}
+}
+
+window.guideNext=()=>{
+  if(guideKey==='nextFlash')startFlashSection(nextFlashSec);
+  else if(guideKey==='afterAllFlash')startGuidedQuiz();
+  else if(guideKey==='afterReview')startFinalQuiz();
+};
+
+function renderGuide(){
+  const quiz=window._activeQuiz;const student=students.find(s=>s.id===activeStudentId);const g=parseInt(student?.grade||5);
+  const secs=quiz?.sections||[];let icon,title,msg,btn;
+  if(guideKey==='nextFlash'){
+    const ns=secs.find(s=>s.id===nextFlashSec);icon='🎉';title=(secs.find(s=>s.id===flashSource)?.name||'')+' done!';
+    msg=gPick(g,'Great job! Now let\'s look at <strong>'+ns?.name+'</strong> cards! 🌟','Nice work! Now let\'s go through <strong>'+ns?.name+'</strong> flashcards!','Now let\'s learn the <strong>'+ns?.name+'</strong> section. Think first, then flip.','Moving on to <strong>'+ns?.name+'</strong>.');
+    btn='Start '+ns?.name+' flashcards →';
+  } else if(guideKey==='afterAllFlash'){
+    icon='🧠';title='All flashcards done!';
+    msg=gPick(g,'WOW you did ALL of them! Now let\'s answer ALL the questions! Every single one! 🌟','You\'ve seen every card! Now for the practice quiz — we go through every question!','All flashcards complete. Now for the practice quiz — all questions, all formats.','Flashcard phase complete. Proceeding to full practice assessment.');
+    btn='Start practice quiz →';
+  } else if(guideKey==='afterReview'){
+    icon='🏆';title=gPick(g,'Amazing! You got them all! 🌟','All missed questions mastered!','All missed questions mastered!','Targeted review complete!');
+    msg=gPick(g,'You went back and got EVERY one right! Now one last quiz through ALL the questions! 🏆','You drilled every missed question. Now for the final quiz — all questions again!','All items cleared. Now for the final quiz — a complete run through all material.','Review queue cleared. Proceeding to final assessment.');
+    btn=gPick(g,'Last quiz! All questions! →','Take the final quiz →','Take the final quiz →','Begin final assessment →');
+  }
+  setMC('<div class="study-wrap">'+hudHTML()+stepsHTML(planStep,quiz)+
+    '<div class="s-card" style="text-align:center;padding:1.8rem 1.5rem">'+
+      '<div style="font-size:44px;margin-bottom:10px">'+icon+'</div>'+
+      '<div style="font-family:Fraunces,serif;font-size:20px;font-weight:800;margin-bottom:10px">'+title+'</div>'+
+      '<div style="font-size:14px;color:var(--ink-soft);line-height:1.6;margin-bottom:20px">'+msg+'</div>'+
+      '<button class="btn btn-gold btn-lg" style="width:100%" onclick="guideNext()">'+btn+'</button>'+
+    '</div>'+stuHomeBtn()+'</div>');
+}
+
+// ── PRACTICE QUIZ — ALL questions, no skipping ──
+function startGuidedQuiz(){
+  const quiz=window._activeQuiz;
+  // Go through ALL questions in order (shuffled but complete)
+  curQs=shuffle(quiz?.questions||[]);
+  idx=0;results={};fillDone=false;renderQuiz();
+}
+
+function renderQuiz(){
+  const quiz=window._activeQuiz;const student=students.find(s=>s.id===activeStudentId);const g=parseInt(student?.grade||5);
+  if(idx>=curQs.length){
+    wrongIds=Object.keys(results).filter(id=>results[id]===false);
+    renderScore();return;
+  }
+  const q=curQs[idx];
+  const inGuide=planStep>=(quiz?.sections?.length||0)+1;
+  const dots=curQs.map((x,i)=>'<div class="s-d'+(i===idx?' cur':results[x.id]===true?' ok':results[x.id]===false?' bad':'')+'" title="Q'+(i+1)+'"></div>').join('');
+  const qHtml=buildQHtml(q,'checkMC','checkFill');
+  const el=stuEl();if(!el)return;
+  el.innerHTML='<div class="study-wrap">'+hudHTML()+(inGuide?stepsHTML(planStep,quiz):'')+
+    '<div class="s-top-bar"><div class="s-dots">'+dots+'</div><div style="font-size:11px;color:var(--ink-faint);font-weight:600">Q'+(idx+1)+'/'+curQs.length+'</div></div>'+
+    '<div class="s-card">'+typeBadge(q.type)+'<div class="s-qnum">'+(q.section||'')+'</div><div class="s-qtext">'+q.q+'</div>'+qHtml+'</div>'+
+  stuHomeBtn()+'</div>';
+  if(q.type==='fill')document.getElementById('fin')?.addEventListener('keydown',e=>{if(e.key==='Enter')checkFill();});
+}
+
+function buildQHtml(q,mcFn,fillFn){
+  const student=students.find(s=>s.id===activeStudentId);const g=parseInt(student?.grade||5);
+  if(q.type==='mc'||q.type==='reverse'){
+    return '<div class="s-opts" id="opts">'+shuffle(q.choices||[]).map(c=>'<button class="s-opt" onclick="'+mcFn+'(this,\''+esc(c)+'\',\''+esc(q.ans)+'\')">'+c+'</button>').join('')+'</div><div id="fb"></div>';
+  }
+  return '<input class="s-fin" id="fin" placeholder="'+gPick(g,'Type your answer! 😊','Type your answer!','Type your answer here…','Enter response…')+'" autocomplete="off"/>'+
+    (q.hint?'<div class="s-hint">💡 '+q.hint+'</div>':'')+
+    '<button class="btn btn-outline btn-sm" onclick="'+fillFn+'()">Check my answer</button><div id="fb"></div>';
+}
+
+function fbMsg(isOk,correct,g){
+  return isOk?gPick(g,'🌟 YES! You got it!','✅ Nice work!','✅ Correct!','✓ Correct.'):gPick(g,'❌ Answer: <strong>'+correct+'</strong> — you\'ll get it!','❌ Answer: <strong>'+correct+'</strong>','❌ Answer: <strong>'+correct+'</strong>','✗ Answer: <strong>'+correct+'</strong>');
+}
+
+function nextRow(isOk,xpVal,nextFn){
+  return '<div class="s-row"><span class="s-xp-pop">'+(isOk?'+'+xpVal+' XP'+(streak>=2?' · '+streak+' in a row! 🔥':''):'+2 XP')+'</span><button class="btn btn-gold btn-sm" onclick="'+nextFn+'()">Next →</button></div>';
+}
+
+window.checkMC=(btn,chosen,correct)=>{
+  if(btn.classList.contains('off')||btn.classList.contains('ok')||btn.classList.contains('bad'))return;
+  const isOk=chosen===correct;results[curQs[idx].id]=isOk;
+  document.querySelectorAll('.s-opt').forEach(o=>{o.classList.add('off');if(o.textContent===correct)o.classList.add('show');});
+  btn.classList.remove('show','off');btn.classList.add(isOk?'ok':'bad');
+  if(isOk){streak++;if(streak>maxStreak)maxStreak=streak;if(streak===5)toast('On Fire! 🔥');addXP(10);}else{streak=0;addXP(2);}
+  const student=students.find(s=>s.id===activeStudentId);
+  document.getElementById('fb').innerHTML='<div class="s-fb '+(isOk?'ok':'bad')+'">'+fbMsg(isOk,correct,parseInt(student?.grade||5))+'</div>'+nextRow(isOk,10,'advance');
+};
+
+window.checkFill=()=>{
+  if(fillDone)return;const val=(document.getElementById('fin')?.value||'').trim();if(!val)return;fillDone=true;
+  const q=curQs[idx],isOk=fuzzyMatch(val,q.ans);results[q.id]=isOk;
+  if(isOk){streak++;if(streak>maxStreak)maxStreak=streak;addXP(10);}else{streak=0;addXP(2);}
+  const el=document.getElementById('fin');if(el)el.disabled=true;
+  const student=students.find(s=>s.id===activeStudentId);const g=parseInt(student?.grade||5);
+  const wasClose=!isOk&&val&&levenshtein(val.toLowerCase(),q.ans.toLowerCase())<=3;
+  document.getElementById('fb').innerHTML='<div class="s-fb '+(isOk?'ok':'bad')+'">'+
+    (isOk?fbMsg(true,q.ans,g):fbMsg(false,q.ans,g)+(wasClose?' <em style="font-size:12px;opacity:.8">(Close! You typed: '+val+')</em>':''))+
+  '</div>'+nextRow(isOk,10,'advance');
+};
+
+window.advance=()=>{fillDone=false;idx++;renderQuiz();};
+
+// ── SCORE ──
+function renderScore(){
+  const quiz=window._activeQuiz;const student=students.find(s=>s.id===activeStudentId);const g=parseInt(student?.grade||5);
+  const total=curQs.length,correct=curQs.filter(q=>results[q.id]===true).length,pct=Math.round(correct/total*100);
+  let msg,tagBg,tagColor;
+  if(pct===100){msg=gPick(g,'PERFECT! You are a SUPERSTAR! 🌟','PERFECT! You knew every single one! 🌟','PERFECT! You know everything! 🌟','Perfect score. Excellent preparation.');tagBg='var(--green-bg)';tagColor='var(--green-dk)';}
+  else if(pct>=80){msg=gPick(g,'SO close to perfect! Amazing! 💪','Really great! Just a few to review! 💪','Really strong — just a few to drill. 💪','Strong result. Drill will close the gap.');tagBg='var(--green-bg)';tagColor='var(--green-dk)';}
+  else if(pct>=60){msg=gPick(g,'Good job! Let\'s practice the tricky ones!','Good effort! The drill will lock them in.','Good start — the drill will help a lot.','Adequate. Targeted review recommended.');tagBg='var(--gold-bg)';tagColor='var(--gold-dk)';}
+  else{msg=gPick(g,'That\'s okay! We\'ll practice together! 💪','Don\'t worry — the drill will get you there!','No worries — the drill will get you there.','Further review needed.');tagBg='var(--red-bg)';tagColor='var(--red-dk)';}
+  const secs=[...new Set(curQs.map(q=>q.section||'Questions'))];
+  const sbars=secs.map(s=>{const sq=curQs.filter(q=>(q.section||'Questions')===s),sc=sq.filter(q=>results[q.id]===true).length,sp=Math.round(sc/sq.length*100);return'<div class="s-srow"><div class="s-sname">'+s+'</div><div class="s-sbar-bg"><div class="s-sbar" style="width:'+sp+'%;background:'+(sp>=80?'var(--green)':sp>=50?'var(--gold)':'var(--red)')+'"></div></div><div class="s-spct">'+sp+'%</div></div>';}).join('');
+  const missedHtml=wrongIds.length?'<div style="font-size:13px;font-weight:700;margin-bottom:7px">'+gPick(g,'Let\'s practice these:','Let\'s review these:','What to review','Items requiring review')+' ('+wrongIds.length+')</div>'+wrongIds.map(id=>{const q=quiz?.questions?.find(x=>x.id===id);return q?'<div class="s-missed"><div class="s-mq">'+q.q+'</div><div class="s-ma">'+q.ans+'</div></div>':'';}).join(''):'<div style="background:var(--green-bg);border-radius:var(--r);padding:10px;text-align:center;color:var(--green-dk);font-weight:700">'+gPick(g,'YOU GOT EVERYTHING RIGHT! YOU ARE AMAZING! 🌟','You got everything right! Incredible! 🎉','Perfect — you got everything right! 🎉','All items correct.')+'</div>';
+  const inGuide=planStep>=(quiz?.sections?.length||0)+1;
+  let nextBtn='';
+  if(inGuide){
+    if(wrongIds.length>0){planStep=(quiz?.sections?.length||0)+2;nextBtn='<button class="btn btn-gold" onclick="startReview()">'+gPick(g,'Practice the '+wrongIds.length+' tricky ones! →','Drill the '+wrongIds.length+' I missed →','Drill the '+wrongIds.length+' I missed →','Begin targeted review ('+wrongIds.length+') →')+'</button>';}
+    else{planStep=(quiz?.sections?.length||0)+3;nextBtn='<button class="btn btn-gold" onclick="startFinalQuiz()">'+gPick(g,'Last quiz — all questions! →','Take the final quiz →','Take the final quiz →','Proceed to final assessment →')+'</button>';}
+  } else {nextBtn=wrongIds.length?'<button class="btn btn-gold" onclick="startReview()">Drill missed ('+wrongIds.length+')</button>':'<button class="btn btn-gold" onclick="renderFreePlay()">Free practice</button>';}
+  const el=stuEl();if(!el)return;
+  el.innerHTML='<div class="study-wrap">'+hudHTML()+(inGuide?stepsHTML(planStep,quiz):'')+
+    '<div class="s-card" style="text-align:center;padding:1.4rem"><div class="s-big">'+pct+'%</div><div style="font-size:13px;color:var(--ink-soft);margin-top:3px">'+correct+' of '+total+' correct</div><div style="display:inline-block;padding:5px 14px;border-radius:99px;font-size:13px;font-weight:700;margin-top:7px;background:'+tagBg+';color:'+tagColor+'">'+msg+'</div></div>'+
+    '<div class="s-metrics"><div class="s-met"><div class="mn" style="color:var(--green)">'+correct+'</div><div class="ml">correct</div></div><div class="s-met"><div class="mn" style="color:var(--red)">'+(total-correct)+'</div><div class="ml">missed</div></div><div class="s-met"><div class="mn" style="color:var(--gold)">'+xp+'</div><div class="ml">XP</div></div><div class="s-met"><div class="mn" style="color:var(--red)">'+maxStreak+'🔥</div><div class="ml">streak</div></div></div>'+
+    '<div class="s-card"><div style="margin-bottom:9px">'+sbars+'</div>'+missedHtml+'</div>'+
+    '<div class="s-action-row">'+nextBtn+'<button class="btn btn-outline" onclick="renderFreePlay()">Free practice</button><button class="btn btn-outline" onclick="stuGoHome()">🏠 Home</button></div>'+
+  '</div>';
+}
+
+// ── DRILL ──
+function startReview(){reviewRound=1;reviewIdx=0;reviewResults={};fillDone=false;renderReview();}
+
+function renderReview(){
+  const quiz=window._activeQuiz;const student=students.find(s=>s.id===activeStudentId);const g=parseInt(student?.grade||5);
+  const remaining=wrongIds.filter(id=>reviewResults[id]!==true);
+  if(!remaining.length){toast('Badge: Comeback Kid! 💪');planStep=(quiz?.sections?.length||0)+3;guideKey='afterReview';renderGuide();return;}
+  const id=remaining[reviewIdx%remaining.length];
+  const q=quiz?.questions?.find(x=>x.id===id);if(!q){advRev();return;}
+  const mastered=wrongIds.filter(id=>reviewResults[id]===true).length,total=wrongIds.length;
+  const el=stuEl();if(!el)return;
+  el.innerHTML='<div class="study-wrap">'+hudHTML()+stepsHTML(planStep,quiz)+
+    '<div class="s-coach"><div class="s-av">'+gPick(g,'🌟','🧑‍🏫','🧑‍🏫','📋')+'</div><div class="s-bubble"><p>'+gPick(g,'Get it right and it goes away forever! You can do it! 💪','Answer correctly and it comes off the list!','Get each one right and it disappears from the queue.','Answer correctly to clear each item.')+'</p></div></div>'+
+    '<div class="s-review-banner">🎯 Round '+reviewRound+' — '+remaining.length+' left to master</div>'+
+    '<div class="s-prog-wrap"><div class="s-prog-lbl">'+mastered+'/'+total+' mastered</div><div class="s-prog-bg"><div class="s-prog-fill" style="width:'+Math.round(mastered/total*100)+'%"></div></div><div class="s-prog-pct">'+Math.round(mastered/total*100)+'%</div></div>'+
+    '<div class="s-card">'+typeBadge(q.type)+'<div class="s-qnum">Drill</div><div class="s-qtext">'+q.q+'</div>'+buildQHtml(q,'checkRevMC','checkRevFill')+'</div>'+
+  stuHomeBtn()+'</div>';
+  if(q.type==='fill'){const qid=q.id;document.getElementById('fin')?.addEventListener('keydown',e=>{if(e.key==='Enter')checkRevFill(qid);});}
+}
+
+window.checkRevMC=(btn,chosen,correct)=>{
+  if(btn.classList.contains('off')||btn.classList.contains('ok')||btn.classList.contains('bad'))return;
+  const isOk=chosen===correct;
+  const qid=wrongIds.filter(id=>reviewResults[id]!==true)[reviewIdx%wrongIds.filter(id=>reviewResults[id]!==true).length];
+  if(isOk)reviewResults[qid]=true;
+  document.querySelectorAll('.s-opt').forEach(o=>{o.classList.add('off');if(o.textContent===correct)o.classList.add('show');});
+  btn.classList.remove('show','off');btn.classList.add(isOk?'ok':'bad');
+  if(isOk)addXP(15);else addXP(2);
+  const student=students.find(s=>s.id===activeStudentId);const g=parseInt(student?.grade||5);
+  const msg=isOk?gPick(g,'🌟 YES! Got it! Gone!','✅ Got it! Off the list!','✅ Mastered!','✓ Cleared.'):gPick(g,'❌ Answer: <strong>'+correct+'</strong> — keep trying!','❌ Answer: <strong>'+correct+'</strong>','❌ Answer: <strong>'+correct+'</strong>','✗ Answer: <strong>'+correct+'</strong>');
+  document.getElementById('fb').innerHTML='<div class="s-fb '+(isOk?'ok':'bad')+'">'+msg+'</div><div class="s-row"><span class="s-xp-pop">'+(isOk?'+15 XP — mastered!':'+2 XP')+'</span><button class="btn btn-gold btn-sm" onclick="advRev()">Next →</button></div>';
+};
+
+window.checkRevFill=(qid)=>{
+  if(fillDone)return;const val=(document.getElementById('fin')?.value||'').trim();if(!val)return;fillDone=true;
+  const quiz=window._activeQuiz,q=quiz?.questions?.find(x=>x.id===qid),isOk=fuzzyMatch(val,q?.ans||'');
+  if(isOk)reviewResults[qid]=true;
+  if(isOk)addXP(15);else addXP(2);
+  const el=document.getElementById('fin');if(el)el.disabled=true;
+  const student=students.find(s=>s.id===activeStudentId);const g=parseInt(student?.grade||5);
+  const msg=isOk?gPick(g,'🌟 YES! That\'s it!','✅ Got it!','✅ Mastered!','✓ Cleared.'):gPick(g,'❌ Answer: <strong>'+q?.ans+'</strong>','❌ Answer: <strong>'+q?.ans+'</strong>','❌ Answer: <strong>'+q?.ans+'</strong>','✗ Answer: <strong>'+q?.ans+'</strong>');
+  document.getElementById('fb').innerHTML='<div class="s-fb '+(isOk?'ok':'bad')+'">'+msg+'</div><div class="s-row"><span class="s-xp-pop">'+(isOk?'+15 XP — mastered!':'+2 XP')+'</span><button class="btn btn-gold btn-sm" onclick="advRev()">Next →</button></div>';
+};
+
+window.advRev=()=>{
+  fillDone=false;const quiz=window._activeQuiz;
+  const remaining=wrongIds.filter(id=>reviewResults[id]!==true);
+  if(!remaining.length){toast('Badge: Comeback Kid! 💪');planStep=(quiz?.sections?.length||0)+3;guideKey='afterReview';renderGuide();return;}
+  reviewIdx++;if(reviewIdx>=wrongIds.length){reviewRound++;reviewIdx=0;}renderReview();
+};
+
+// ── FINAL QUIZ — ALL questions again ──
+function startFinalQuiz(){
+  const quiz=window._activeQuiz;
+  // Final quiz goes through ALL questions again, fully
+  curQs=shuffle(quiz?.questions||[]);
+  idx=0;results={};fillDone=false;renderFinal();
+}
+
+function renderFinal(){
+  const quiz=window._activeQuiz;const student=students.find(s=>s.id===activeStudentId);const g=parseInt(student?.grade||5);
+  if(idx>=curQs.length){planStep=(quiz?.sections?.length||0)+4;renderAllDone();return;}
+  const q=curQs[idx];
+  const dots=curQs.map((x,i)=>'<div class="s-d'+(i===idx?' cur':results[x.id]===true?' ok':results[x.id]===false?' bad':'')+'" title="Q'+(i+1)+'"></div>').join('');
+  const el=stuEl();if(!el)return;
+  el.innerHTML='<div class="study-wrap">'+hudHTML()+stepsHTML(planStep,quiz)+
+    '<div style="background:var(--green-bg);border:1px solid rgba(45,122,58,.18);border-radius:var(--r);padding:.65rem 1rem;margin-bottom:7px;font-size:13px;font-weight:700;color:var(--green-dk)">'+gPick(g,'⭐ LAST QUIZ — ALL questions! You can do this! 🌟','⭐ Final quiz — every question, one last time!','⭐ Final quiz — all '+curQs.length+' questions. Show what you know.','Final assessment — complete coverage of all material.')+'</div>'+
+    '<div class="s-top-bar"><div class="s-dots">'+dots+'</div><div style="font-size:11px;color:var(--ink-faint);font-weight:600">Q'+(idx+1)+'/'+curQs.length+'</div></div>'+
+    '<div class="s-card">'+typeBadge(q.type)+'<div class="s-qnum">'+(q.section||'')+'</div><div class="s-qtext">'+q.q+'</div>'+buildQHtml(q,'checkFinalMC','checkFinalFill')+'</div>'+
+  stuHomeBtn()+'</div>';
+  if(q.type==='fill')document.getElementById('fin')?.addEventListener('keydown',e=>{if(e.key==='Enter')checkFinalFill();});
+}
+
+window.checkFinalMC=(btn,chosen,correct)=>{
+  if(btn.classList.contains('off')||btn.classList.contains('ok')||btn.classList.contains('bad'))return;
+  const isOk=chosen===correct;results[curQs[idx].id]=isOk;
+  document.querySelectorAll('.s-opt').forEach(o=>{o.classList.add('off');if(o.textContent===correct)o.classList.add('show');});
+  btn.classList.remove('show','off');btn.classList.add(isOk?'ok':'bad');
+  if(isOk){streak++;if(streak>maxStreak)maxStreak=streak;addXP(12);}else{streak=0;addXP(2);}
+  const student=students.find(s=>s.id===activeStudentId);const g=parseInt(student?.grade||5);
+  document.getElementById('fb').innerHTML='<div class="s-fb '+(isOk?'ok':'bad')+'">'+fbMsg(isOk,correct,g)+'</div>'+nextRow(isOk,12,'advFinal');
+};
+
+window.checkFinalFill=()=>{
+  if(fillDone)return;const val=(document.getElementById('fin')?.value||'').trim();if(!val)return;fillDone=true;
+  const q=curQs[idx],isOk=fuzzyMatch(val,q.ans);results[q.id]=isOk;
+  if(isOk){streak++;if(streak>maxStreak)maxStreak=streak;addXP(12);}else{streak=0;addXP(2);}
+  const el=document.getElementById('fin');if(el)el.disabled=true;
+  const student=students.find(s=>s.id===activeStudentId);const g=parseInt(student?.grade||5);
+  const wasClose=!isOk&&val&&levenshtein(val.toLowerCase(),q.ans.toLowerCase())<=3;
+  document.getElementById('fb').innerHTML='<div class="s-fb '+(isOk?'ok':'bad')+'">'+
+    (isOk?fbMsg(true,q.ans,g):fbMsg(false,q.ans,g)+(wasClose?' <em style="font-size:12px;opacity:.8">(Close! You typed: '+val+')</em>':''))+
+  '</div>'+nextRow(isOk,12,'advFinal');
+};
+
+window.advFinal=()=>{fillDone=false;idx++;renderFinal();};
+
+// ── ALL DONE ──
+function renderAllDone(){
+  const quiz=window._activeQuiz;const student=students.find(s=>s.id===activeStudentId);const g=parseInt(student?.grade||5);
+  const total=curQs.length,correct=curQs.filter(q=>results[q.id]===true).length,pct=Math.round(correct/total*100);
+  const el=stuEl();if(!el)return;
+  el.innerHTML='<div class="study-wrap">'+hudHTML()+stepsHTML((quiz?.sections?.length||0)+5,quiz)+
+    '<div class="s-card" style="text-align:center;padding:1.8rem 1.5rem">'+
+      '<div style="font-size:50px;margin-bottom:9px">'+(pct>=90?'🏆':pct>=75?'⭐':'💪')+'</div>'+
+      '<div class="s-big">'+pct+'%</div>'+
+      '<div style="font-size:13px;color:var(--ink-soft);margin-bottom:11px">Final: '+correct+' of '+total+' correct — all questions, all formats</div>'+
+      '<div style="padding:9px 16px;border-radius:var(--r);font-size:14px;font-weight:700;background:'+(pct>=80?'var(--green-bg)':'var(--gold-bg)')+';color:'+(pct>=80?'var(--green-dk)':'var(--gold-dk)')+'">'+
+        (pct>=90?gPick(g,'SUPERSTAR! You are SO ready! 🏆','Outstanding! Absolutely ready! 🏆','Outstanding — you are READY!','Excellent preparation.'):
+         pct>=80?gPick(g,'WOW! You\'ve got this! 💪','Really strong — you\'ve got this! 💪','Really strong — you\'ve got this!','Strong result.'):
+         pct>=60?gPick(g,'Good job! Do it one more time!','Good effort! One more round!','Good job! One more round.','Adequate. Consider one more review.'):
+         gPick(g,'Keep going! Getting better! 💪','Keep going — you\'re getting there!','Keep going.','Further review recommended.'))+
+      '</div>'+
+      '<div style="font-size:12px;color:var(--ink-faint);margin-top:12px">Total XP: <strong style="color:var(--gold)">'+xp+'</strong> · Best streak: <strong style="color:var(--red)">'+maxStreak+'🔥</strong></div>'+
+    '</div>'+
+    '<div class="s-action-row">'+
+      '<button class="btn btn-gold" onclick="resetStudentState();renderStudentWelcome(students.find(s=>s.id===activeStudentId),window._activeQuiz)">Start over</button>'+
+      '<button class="btn btn-outline" onclick="renderFreePlay()">Free practice</button>'+
+      '<button class="btn btn-outline" onclick="stuGoHome()">🏠 My Quizzes</button>'+
+    '</div>'+
+  '</div>';
+}
+
+// ── FREE PLAY ──
+window.renderFreePlay=()=>{
+  const quiz=window._activeQuiz;const student=students.find(s=>s.id===activeStudentId);const g=parseInt(student?.grade||5);
+  if(!quiz){setMC('<div class="study-wrap"><div class="empty"><div class="empty-icon">📚</div><div class="empty-title">No quiz selected</div></div></div>');return;}
+  const secs=quiz.sections||[];
+  setMC('<div class="study-wrap">'+hudHTML()+
+    '<div class="s-card" style="margin-bottom:9px"><div class="sdiv">'+gPick(g,'Flashcards — look and flip! 📖','Flashcard practice','Flashcard practice','Flashcard review')+'</div>'+
+      secs.map(s=>'<button class="btn btn-outline" style="width:100%;text-align:left;margin-bottom:7px;padding:10px 14px" onclick="planStep=0;startFlashSection(\''+s.id+'\')">📖 '+s.name+' <span style="float:right;font-size:11px;color:var(--ink-faint)">'+s.questions.length+' cards</span></button>').join('')+
+    '</div>'+
+    '<div class="s-card" style="margin-bottom:9px"><div class="sdiv">'+gPick(g,'Quiz questions! ⭐','Quiz practice — all questions','Quiz practice','Practice assessment')+'</div>'+
+      secs.map(s=>'<button class="btn btn-outline" style="width:100%;text-align:left;margin-bottom:7px;padding:10px 14px" onclick="startQuizFree(\''+s.id+'\')">📝 '+s.name+' <span style="float:right;font-size:11px;color:var(--ink-faint)">'+s.questions.length+' questions</span></button>').join('')+
+      '<button class="btn btn-gold" style="width:100%;text-align:left;padding:10px 14px" onclick="startQuizFree(\'all\')">⭐ '+gPick(g,'ALL '+(quiz.questions?.length||0)+' questions! →','Full quiz — all '+(quiz.questions?.length||0)+' questions','Full quiz — all '+(quiz.questions?.length||0)+' questions','Complete assessment — '+(quiz.questions?.length||0)+' questions')+'</button>'+
+    '</div>'+
+    '<div style="text-align:center;margin-top:8px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">'+
+      '<button class="btn btn-outline btn-sm" onclick="resetStudentState();renderStudentWelcome(students.find(s=>s.id===activeStudentId),window._activeQuiz)">← Guided plan</button>'+
+      '<button class="btn btn-outline btn-sm" onclick="stuGoHome()">🏠 My Quizzes</button>'+
+    '</div>'+
+  '</div>');
+};
+
+window.startQuizFree=(secId)=>{
+  planStep=0;
+  curQs=secId==='all'?shuffle(window._activeQuiz?.questions||[]):shuffle((window._activeQuiz?.sections?.find(s=>s.id===secId)?.questions)||[]);
+  idx=0;results={};fillDone=false;renderQuiz();
+};
+
+// ── STUDENT HOME NAVIGATION ──
+window.stuGoHome = () => {
+  // If in a study session, confirm before leaving
+  if (window._studyInStuApp && window._activeQuiz) {
+    if (!confirm('Go back to your quiz list? Your current progress will be lost.')) return;
+    window._studyInStuApp = false;
+    window._activeQuiz = null;
+    resetStudentState();
+  }
+  updateStuHeader(stuCurrentStudentId ? (students.find(s=>s.id===stuCurrentStudentId)?.name || '') + "'s Quizzes" : 'Student Dashboard');
+  if (stuCurrentStudentId) {
+    loadStuQuizzes(stuCurrentStudentId);
+  } else {
+    renderStuWhosPicking();
+  }
+};
+
+function updateStuHeader(subtitle) {
+  const el = document.getElementById('stu-header-sub');
+  if (el) el.textContent = subtitle || 'Student Dashboard';
+}
+
+// Floating home button shown during study — appended to stu-body content
+function stuHomeBtn() {
+  return '<button onclick="stuGoHome()" style="position:fixed;bottom:20px;right:20px;padding:10px 18px;border-radius:99px;background:var(--ink);color:white;font-size:13px;font-weight:700;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(26,23,20,.3);font-family:DM Sans,sans-serif;z-index:100;display:flex;align-items:center;gap:6px" onclick="stuGoHome()">🏠 My Quizzes</button>';
+}
+
+// ── EXPOSE ALL FUNCTIONS TO WINDOW ──
+window.studentStartPlan=studentStartPlan;
+window.startFlashSection=startFlashSection;
+window.renderFlash=renderFlash;
+window.flashNextLabel=flashNextLabel;
+window.afterFlashSection=afterFlashSection;
+window.startGuidedQuiz=startGuidedQuiz;
+window.renderQuiz=renderQuiz;
+window.renderScore=renderScore;
+window.startReview=startReview;
+window.renderReview=renderReview;
+window.startFinalQuiz=startFinalQuiz;
+window.renderFinal=renderFinal;
+window.renderAllDone=renderAllDone;
+window.resetStudentState=resetStudentState;
+window.renderStuWhosPicking=renderStuWhosPicking;
+window.loadStuQuizzes=loadStuQuizzes;
+window.renderStuQuizList=renderStuQuizList;
+window.renderStudentWelcome=renderStudentWelcome;
+window.renderGuide=renderGuide;
+window.addXP=addXP;
+window.stuEl=stuEl;
+window.setMC=setMC;
+window.hudHTML=hudHTML;
+window.stepsHTML=stepsHTML;
+window.buildQHtml=buildQHtml;
+window.fbMsg=fbMsg;
+window.nextRow=nextRow;
+window.typeBadge=typeBadge;
+window.fuzzyMatch=fuzzyMatch;
+window.levenshtein=levenshtein;
+window.gPick=gPick;
+window.gTier=gTier;
+window.gradeLabel=gradeLabel;
+window.shuffle=shuffle;
+window.esc=esc;
+window.toast=toast;
+window.renderRewardsView=renderRewardsView;
+window.renderSettingsView=renderSettingsView;
+window.checkNotifBadge=checkNotifBadge;
+</script>
+</body>
+</html>
